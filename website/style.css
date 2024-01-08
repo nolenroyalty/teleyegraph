@@ -1,0 +1,172 @@
+:root {
+    --bg-color: black;
+    --font-color: white;
+    --highlight-color: blue;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--font-color);
+}
+
+#wrapper {
+    width: 40%;
+    margin: auto;
+}
+
+#videoWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+#videoStream {
+    max-width: 100%;
+    height: 30vh;
+    background: blue;
+    margin: auto;
+}
+
+#myCanvas {
+    width: 200px;
+    background: red;
+    border: 10px solid;
+}
+
+#theButton {
+    margin: auto;
+    font-size: 20px;
+    border-radius:10px;
+    padding: 5px 10px;
+    margin: 10px auto;
+    border: none;
+}
+
+#buttonAndText {
+    display: grid;
+}
+
+#morseGrid {
+    width: 100%;
+    display: grid;
+
+    grid-template-areas:
+        "signal"
+        "char"
+        "word"
+        "text";
+
+    grid-template-rows: 1.5em 1.5em auto auto;
+}
+
+#morseGrid div {
+    border: 1px solid;
+}
+
+#wordDiv {
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*align-items: start;*/
+}
+
+#wordDiv p {
+    /*margin: auto;*/
+    padding: 0;
+}
+
+#signalCanvas {
+    height: 100%;
+    /* 0 is 5 dahs (with 4 spaces), so we want the char canvas to handle things that
+    are 19/3 times bigger than this. */
+    width: 15%;
+}
+
+#charCanvas {
+    height: 100%;
+    width: 100%;
+}
+
+#currentCharGrid {
+    width: 100%;
+    display: grid;
+    columns: 2;
+    grid-template-columns: 10% 30% 60%;
+    grid-template-rows: minmax(30px, 25%) 1fr;
+    grid-template-areas:
+        "nextdur alldurs allchars"
+        "words words words";
+    font-size: 80px;
+}
+
+#currentCharGrid p {
+    display: inline-block;
+    min-height: 1.1em;
+}
+
+#potentialNextDuration {
+    grid-area: nextdur;
+}
+
+#durationsForThisWord {
+    grid-area: alldurs;
+}
+
+#charsForThisWord {
+    grid-area: allchars;
+}
+
+#writtenText {
+    min-height: 1.2em;
+    grid-area: words;
+}
+
+
+#currentCharGrid p {
+    margin: 0;
+}
+
+@keyframes flash-message {
+    100% {
+        opacity: 1;
+        scale(1);
+    }
+
+    25% {
+        opacity: 1;
+        scale(1.1);
+    }
+
+    50% {
+        scale(1);
+        opacity:1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.flash-message {
+    animation: flash-message 1s ease-out forwards;
+}
+
+@keyframes background-change {
+    0% {
+        background-color: #000000;
+    }
+
+    30% {
+        background-color: #191925;
+    }
+
+    80% {
+        background-color: #000000;
+    }
+
+    100% {
+        background-color: #000000;
+    }
+}
+
+.background-change {
+    animation: background-change 0.8s forwards;
+}

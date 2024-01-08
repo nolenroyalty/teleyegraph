@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="theme-color" content="black">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <title>telEyegraph</title>
+</head>
+<body id="bodyNode">
+    <audio id="blockSound" src="/block.mp3" preload="auto"></audio>
+
+    <div id="wrapper">
+        <header>
+            <h1>telEyegraph</h1>
+        </header>
+
+        <div id="videoWrapper">
+            <video id="videoStream" autoplay playsinline muted></video>
+            <button id="theButton">enable your webcam</button>
+            <div>
+                <label for="eyesClosedBox">eyes closed</label><input type="checkbox" id="eyesClosedBox"/>
+            </div>
+        </div>
+
+        <div id="morseGrid">
+            <div id="signalDiv">
+                <canvas id="signalCanvas"></canvas>
+            </div>
+            <div id="charDiv">
+                <canvas id="charCanvas"></canvas>
+            </div>
+            <div id="wordDiv">
+                <p id="currentWord">word</p>
+            </div>
+            <div id="textDiv">
+                <p id="allText">text</p>
+            </div>
+        </div>
+
+        <div id="buttonAndText">
+
+            <div id="currentCharGrid">
+                <p id="potentialNextDuration"></p>
+                <p id="durationsForThisWord"><p>
+                <p id="charsForThisWord"><p>
+                <p id="writtenText"></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/app.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm/vision_wasm_internal.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.0/socket.io.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
