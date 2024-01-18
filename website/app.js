@@ -183,13 +183,17 @@ function drawSignalState(onCount, currentRatio, howOff) {
     const targetWidth = Math.min(blockSize * onCount + currentRatio * blockSize, width);
 
     // nroyalty: think about naming??
-    signalCtx.fillStyle = greyScale(1 - .75 * howOff);
+    signalCtx.fillStyle = greyScale(1 - .95 * howOff);
 
     const startHeight = signalCanvas.height / 3;
     const fillHeight = startHeight;
     signalCtx.fillRect(0, startHeight, targetWidth, fillHeight);
 }
 
+let currentCharacter = [];
+function drawCharacterState() {
+    
+}
 
 const frameCounts = [0, 0, 0, 0, 0];
 let curFrameCount = 0;
@@ -231,6 +235,7 @@ function guessCurrentState(onFrames, totalFrames, fps) {
 
 let currentEstimatedFps = 0;
 let priorOnCount = 0;
+let currentOnConfidence = 0;
 let priorOffCount = 0;
 let onFramesThisDit = 0;
 let tickState = TICKSTATE.UNDETERMINED;
@@ -246,13 +251,19 @@ function processFrame(isOn) {
         // nothing to do yet
     } else if (guess === TICKSTATE.ON) {
         console.log(`draw: ${priorOnCount} ${confidence}`);
+        currentOnConfidence = confidence;
         drawSignalState(priorOnCount, confidence, 0);
         if (!tookActionThisTick && confidence >= 1.0) {
             tookActionThisTick = true;
             tickState = TICKSTATE.ON;         
         }
     } else if (guess === TICKSTATE.OFF) {
-        drawSignalState(priorOnCount, 0, confidence);         
+        if (!tookActionThisTick && confidence >= 1.0) {
+            tookActionThisTick = true;
+            tickState = TICKSTATE.OFF;
+        }
+
+        drawSignalState(priorOnCount, currentOnConfidence, confidence);         
     }
 }
 
@@ -265,8 +276,10 @@ function processTick() {
     if (tickState === TICKSTATE.ON) {
         // nroyalty: CONSTANT?
         priorOnCount = Math.min(priorOnCount + 1, 3);
+        priorOffCount = 0;
     } else if (tickState === TICKSTATE.OFF) {
         priorOnCount = 0;
+        priorOffCount = Math.min(priorOffCount + 1, 7);
     } else {
         console.log("No guess for this round!");
         priorOnCount = 0;
@@ -275,6 +288,7 @@ function processTick() {
     tickState = TICKSTATE.UNDETERMINED;
     tookActionThisTick = false;
     onFramesThisDit = 0;
+    currentOnConfidence = 0;
 }
 
 async function handleAnimationFrame(frameTime) {
