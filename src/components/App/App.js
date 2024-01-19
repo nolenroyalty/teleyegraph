@@ -1,14 +1,29 @@
 import React from "react";
+
 import VideoDisplay from "../VideoDisplay";
 import BlinkStateTestDisplay from "../BlinkStateTestDisplay";
 
 import useLandmarker from "../../hooks/use-landmarker";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
+import useSound from "../../hooks/use-sound";
 import { decodeMorse } from "../../utils";
 
 function App() {
   const videoRef = React.useRef();
+  const { play: playBlock, resetAudioPath: resetBlock } = useSound({
+    audioPath: "/block.mp3",
+  });
+
+  const { play: playCymbal, resetAudioPath: resetCymbal } = useSound({
+    audioPath: "/cymbal.mp3",
+  });
+
+  const resetAllAudio = React.useCallback(() => {
+    resetBlock();
+    resetCymbal();
+  }, [resetBlock, resetCymbal]);
+
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
   const landmarker = useLandmarker();
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
@@ -31,10 +46,9 @@ function App() {
         }
         setCurrentSignal({ state: "none" });
       } else if (signalCount.current.off === 3) {
-        // a is set to the concatenation of currentChar
-
         const decoded = decodeMorse(currentChar.join(""));
         if (decoded !== null) {
+          playCymbal();
           setCurrentWord((currentWord) => currentWord + decoded);
         } else {
           // nroyalty: HANDLE ERROR
@@ -58,7 +72,9 @@ function App() {
 
   const { estimateFps, signalState } = useProcessTick({
     videoDisplayed,
+    playSound: playBlock,
   });
+
   const { decisionThisTick } = useProcessFrame({
     landmarker,
     videoRef,
@@ -69,9 +85,12 @@ function App() {
 
   return (
     <main>
-      <VideoDisplay ref={videoRef} setVideoDisplayed={setVideoDisplayed} />
+      <VideoDisplay
+        ref={videoRef}
+        setVideoDisplayed={setVideoDisplayed}
+        onButtonPress={resetAllAudio}
+      />
       <BlinkStateTestDisplay
-        decisionThisTick={decisionThisTick}
         estimateFps={estimateFps}
         currentSignal={currentSignal}
         currentChar={currentChar}

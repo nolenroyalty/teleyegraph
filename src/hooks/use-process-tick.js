@@ -1,6 +1,6 @@
 import React from "react";
 
-function useProcessTick({ videoDisplayed }) {
+function useProcessTick({ videoDisplayed, playSound }) {
   const TICK_TIME = 1000;
   const BEST_FPS_GUESS = 60;
   const TICKS_PER_FRAME = TICK_TIME / 1000;
@@ -21,6 +21,9 @@ function useProcessTick({ videoDisplayed }) {
       if (!videoDisplayed) {
         return;
       }
+
+      playSound();
+
       setRecentFrameCounts((counts) => {
         const newCounts = [...counts];
         newCounts[frameCountIndex.current] =
@@ -37,7 +40,7 @@ function useProcessTick({ videoDisplayed }) {
 
     const timerId = setInterval(handleTick, TICK_TIME);
     return () => clearInterval(timerId);
-  }, [signalState, videoDisplayed]);
+  }, [signalState, videoDisplayed, playSound]);
 
   const estimateFps = React.useCallback(() => {
     const averageFrames = recentFrameCounts.reduce(

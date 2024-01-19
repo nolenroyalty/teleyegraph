@@ -10,7 +10,6 @@ function RowDisplay({ label, data }) {
 
 function BlinkStateTestDisplay({
   estimateFps,
-  decisionThisTick,
   currentSignal,
   currentChar,
   currentWord,
@@ -19,7 +18,6 @@ function BlinkStateTestDisplay({
   return (
     <ul>
       {[
-        ["Decision This Tick", decisionThisTick],
         ["Estimated FPS", estimateFps()],
         ["currentSignal", currentSignal.state],
         ["currentChar", currentChar],

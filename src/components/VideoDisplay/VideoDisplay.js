@@ -1,8 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-function VideoDisplay({ setVideoDisplayed }, ref) {
+function VideoDisplay({ setVideoDisplayed, onButtonPress }, ref) {
+  console.log("VIDEO RENDER");
   function enableCam() {
+    onButtonPress();
     navigator.mediaDevices
       .getUserMedia({ video: true })
       .then((stream) => {
