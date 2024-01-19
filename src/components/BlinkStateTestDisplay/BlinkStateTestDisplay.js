@@ -1,32 +1,34 @@
 import React from "react";
 
-function BlinkStateTestDisplay({ estimateFps, tickState }) {
-  const estimatedFps = estimateFps();
-  const framesThisTick = tickState.open + tickState.closed;
-  const neededToCountAsBlink = Math.ceil(estimatedFps / 2);
-
-  let blinkString = "Unknown";
-  if (tickState.open >= neededToCountAsBlink) {
-    blinkString = "Open";
-  } else if (tickState.closed >= neededToCountAsBlink) {
-    blinkString = "Closed";
-  }
-
+function RowDisplay({ label, data }) {
   return (
-    <div>
-      <p>
-        <em>Blink State This Tick:</em> {blinkString}
-        <br />
-        <em>fps:</em> {estimatedFps}
-        <br />
-        <em>frames this tick:</em> {framesThisTick}
-        <br />
-        <em>open:</em> {tickState.open}
-        <br />
-        <em>closed:</em> {tickState.closed}
-        <br />
-      </p>
-    </div>
+    <li>
+      <em>{label}:</em> {data}
+    </li>
+  );
+}
+
+function BlinkStateTestDisplay({
+  estimateFps,
+  decisionThisTick,
+  currentSignal,
+  currentChar,
+  currentWord,
+  text,
+}) {
+  return (
+    <ul>
+      {[
+        ["Decision This Tick", decisionThisTick],
+        ["Estimated FPS", estimateFps()],
+        ["currentSignal", currentSignal.state],
+        ["currentChar", currentChar],
+        ["currentWord", currentWord],
+        ["text", text],
+      ].map(([label, data]) => {
+        return <RowDisplay key={label} label={label} data={data} />;
+      })}
+    </ul>
   );
 }
 

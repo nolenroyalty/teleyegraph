@@ -4,9 +4,12 @@ import { videoReady, isBlinking } from "../utils";
 function useProcessFrame({
   landmarker,
   videoRef,
-  framesThisTick,
-  setTickState,
+  signalState,
+  estimateFps,
+  callOnTickTransition,
 }) {
+  const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
+
   React.useEffect(() => {
     let reqId;
 
@@ -16,22 +19,34 @@ function useProcessFrame({
         return;
       }
 
-      framesThisTick.current += 1;
       const results = landmarker.detectForVideo(
         videoRef.current,
         performance.now()
       );
 
       if (isBlinking(results)) {
-        setTickState((tickState) => ({
-          ...tickState,
-          closed: tickState.closed + 1,
-        }));
+        signalState.current.closed += 1;
       } else {
-        setTickState((tickState) => ({
-          ...tickState,
-          open: tickState.open + 1,
-        }));
+        signalState.current.open += 1;
+      }
+
+      function setDecisionAndMaybeHandleTransition(decision) {
+        setDecisionThisTick((state) => {
+          if (state === "unknown") {
+            callOnTickTransition(decision);
+          }
+          return decision;
+        });
+      }
+
+      const neededToCountAsBlink = Math.ceil(estimateFps() / 2);
+      if (signalState.current.open >= neededToCountAsBlink) {
+        setDecisionAndMaybeHandleTransition("open");
+      } else if (signalState.current.closed >= neededToCountAsBlink) {
+        setDecisionAndMaybeHandleTransition("closed");
+      } else {
+        // TBD: do we want to call the transition handler here?
+        setDecisionThisTick("unknown");
       }
     }
 
@@ -40,7 +55,9 @@ function useProcessFrame({
     return () => {
       window.cancelAnimationFrame(reqId);
     };
-  }, [framesThisTick, landmarker, setTickState, videoRef]);
+  }, [signalState, landmarker, videoRef, estimateFps, callOnTickTransition]);
+
+  return { decisionThisTick };
 }
 
 export default useProcessFrame;
