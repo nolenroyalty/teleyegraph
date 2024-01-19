@@ -27,4 +27,4 @@ const Video = styled.video`
   height: 100%;
 `;
 
-export default React.forwardRef(VideoDisplay);
+export default React.memo(React.forwardRef(VideoDisplay));

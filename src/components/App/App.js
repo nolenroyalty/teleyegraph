@@ -9,24 +9,19 @@ import useProcessTick from "../../hooks/use-process-tick";
 function App() {
   const videoRef = React.useRef();
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
-
   const [tickState, setTickState] = React.useState({ open: 0, closed: 0 });
   const landmarker = useLandmarker();
-  const framesThisTick = React.useRef(0);
-  useProcessFrame({ landmarker, videoRef, framesThisTick, setTickState });
-  const { recentFrameCounts } = useProcessTick({
-    framesThisTick,
+
+  const { estimateFps, framesThisTick } = useProcessTick({
     setTickState,
     videoDisplayed,
   });
+  useProcessFrame({ landmarker, videoRef, framesThisTick, setTickState });
 
   return (
     <main>
       <VideoDisplay ref={videoRef} setVideoDisplayed={setVideoDisplayed} />
-      <BlinkStateTestDisplay
-        tickState={tickState}
-        recentFrameCounts={recentFrameCounts}
-      />
+      <BlinkStateTestDisplay tickState={tickState} estimateFps={estimateFps} />
     </main>
   );
 }

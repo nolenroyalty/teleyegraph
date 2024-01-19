@@ -1,13 +1,7 @@
 import React from "react";
 
-function BlinkStateTestDisplay({ recentFrameCounts, tickState }) {
-  function estimateFps(frameCounts) {
-    const averageFrames = frameCounts.reduce((sum, count) => sum + count, 0);
-    const averageFps = averageFrames / frameCounts.length;
-    return averageFps;
-  }
-
-  const estimatedFps = estimateFps(recentFrameCounts);
+function BlinkStateTestDisplay({ estimateFps, tickState }) {
+  const estimatedFps = estimateFps();
   const framesThisTick = tickState.open + tickState.closed;
   const neededToCountAsBlink = Math.ceil(estimatedFps / 2);
 
