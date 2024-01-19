@@ -17,19 +17,27 @@ function App() {
     setAudioDependencies((dependencies) => [...dependencies, audioPath]);
   }, []);
 
+  const removeAudioDependency = React.useCallback(({ key }) => {
+    setAudioDependencies((dependencies) => {
+      return dependencies.filter((dependency) => dependency.key !== key);
+    });
+  }, []);
+
   const { play: playBlock } = useSound({
     audioPath: "/block.mp3",
     addAudioDependency,
+    removeAudioDependency,
   });
 
   const { play: playCymbal } = useSound({
     audioPath: "/cymbal.mp3",
     addAudioDependency,
+    removeAudioDependency,
   });
 
   const resetAllAudio = React.useCallback(() => {
-    audioDependencies.forEach((reset) => {
-      reset();
+    audioDependencies.forEach(({ resetAudioPath }) => {
+      resetAudioPath();
     });
   }, [audioDependencies]);
 

@@ -1,6 +1,6 @@
 import React from "react";
 
-function useSound({ audioPath, addAudioDependency }) {
+function useSound({ audioPath, addAudioDependency, removeAudioDependency }) {
   const audio = React.useRef(new Audio());
 
   const resetAudioPath = React.useCallback(() => {
@@ -8,8 +8,14 @@ function useSound({ audioPath, addAudioDependency }) {
   }, [audioPath]);
 
   React.useEffect(() => {
-    addAudioDependency(resetAudioPath);
-  }, [addAudioDependency, resetAudioPath]);
+    const key = crypto.randomUUID();
+
+    addAudioDependency({ key, resetAudioPath });
+
+    return () => {
+      removeAudioDependency({ key });
+    };
+  }, [addAudioDependency, removeAudioDependency, resetAudioPath]);
 
   const play = React.useCallback(() => {
     audio.current.play();
