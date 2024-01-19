@@ -11,18 +11,27 @@ import { decodeMorse } from "../../utils";
 
 function App() {
   const videoRef = React.useRef();
-  const { play: playBlock, resetAudioPath: resetBlock } = useSound({
+  const [audioDependencies, setAudioDependencies] = React.useState([]);
+
+  const addAudioDependency = React.useCallback((audioPath) => {
+    setAudioDependencies((dependencies) => [...dependencies, audioPath]);
+  }, []);
+
+  const { play: playBlock } = useSound({
     audioPath: "/block.mp3",
+    addAudioDependency,
   });
 
-  const { play: playCymbal, resetAudioPath: resetCymbal } = useSound({
+  const { play: playCymbal } = useSound({
     audioPath: "/cymbal.mp3",
+    addAudioDependency,
   });
 
   const resetAllAudio = React.useCallback(() => {
-    resetBlock();
-    resetCymbal();
-  }, [resetBlock, resetCymbal]);
+    audioDependencies.forEach((reset) => {
+      reset();
+    });
+  }, [audioDependencies]);
 
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
   const landmarker = useLandmarker();
