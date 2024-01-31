@@ -19,14 +19,24 @@ function VideoDisplay({ setVideoDisplayed, onButtonPress }, ref) {
   return (
     <>
       <Video ref={ref} autoPlay muted></Video>
-      <button onClick={enableCam}>enable</button>
+      <Button onClick={enableCam}>enable</Button>
     </>
   );
 }
 
 const Video = styled.video`
   width: 200px;
+  height: 200px;
+  margin: 100px auto 20px;
+`;
+
+const Button = styled.button`
+  width: fit-content;
+  padding: 5px 20px;
   height: 100%;
+  margin: 20px auto 20px;
+  border: 1px solid black;
+  border-radius: 10px;
 `;
 
 export default React.memo(React.forwardRef(VideoDisplay));

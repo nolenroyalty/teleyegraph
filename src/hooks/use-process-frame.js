@@ -7,6 +7,7 @@ function useProcessFrame({
   signalState,
   estimateFps,
   callOnTickTransition,
+  eyesClosed,
 }) {
   const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
 
@@ -24,7 +25,7 @@ function useProcessFrame({
         performance.now()
       );
 
-      if (isBlinking(results)) {
+      if (eyesClosed || isBlinking(results)) {
         signalState.current.closed += 1;
       } else {
         signalState.current.open += 1;

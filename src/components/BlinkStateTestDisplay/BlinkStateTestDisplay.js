@@ -8,6 +8,10 @@ function RowDisplay({ label, data }) {
   );
 }
 
+const TextDisplay = React.memo(({ text }) => {
+  return <p>foo {text}</p>;
+});
+
 function BlinkStateTestDisplay({
   estimateFps,
   currentSignal,
@@ -16,17 +20,19 @@ function BlinkStateTestDisplay({
   text,
 }) {
   return (
-    <ul>
-      {[
-        ["Estimated FPS", estimateFps()],
-        ["currentSignal", currentSignal.state],
-        ["currentChar", currentChar],
-        ["currentWord", currentWord],
-        ["text", text],
-      ].map(([label, data]) => {
-        return <RowDisplay key={label} label={label} data={data} />;
-      })}
-    </ul>
+    <>
+      <ul>
+        {[
+          ["Estimated FPS", estimateFps()],
+          ["currentSignal", currentSignal.state],
+          ["currentChar", currentChar],
+          ["currentWord", currentWord],
+        ].map(([label, data]) => {
+          return <RowDisplay key={label} label={label} data={data} />;
+        })}
+      </ul>
+      <TextDisplay text={text} />
+    </>
   );
 }
 

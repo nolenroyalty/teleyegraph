@@ -8,9 +8,12 @@ import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
 import useSound from "../../hooks/use-sound";
 import { decodeMorse } from "../../utils";
+import CurrentSignalDisplay from "../CurrentSignalDisplay";
+import styled from "styled-components";
 
 function App() {
   const videoRef = React.useRef();
+  const eyesClosedRef = React.useRef();
   const [audioDependencies, setAudioDependencies] = React.useState([]);
 
   const addAudioDependency = React.useCallback((audioPath) => {
@@ -47,6 +50,7 @@ function App() {
   const [currentChar, setCurrentChar] = React.useState([]);
   const [currentWord, setCurrentWord] = React.useState("");
   const [text, setText] = React.useState("");
+  const [eyesClosed, setEyesClosed] = React.useState(false);
 
   const signalCount = React.useRef({ on: 0, off: 0 });
 
@@ -82,6 +86,7 @@ function App() {
       if (signalCount.current.on === 3) {
         setCurrentSignal({ state: "-" });
       } else if (signalCount.current.on < 3) {
+        console.log("on", signalCount.current.on);
         setCurrentSignal({ state: ".", count: signalCount.current.on });
       }
     }
@@ -98,24 +103,46 @@ function App() {
     signalState,
     estimateFps,
     callOnTickTransition,
+    eyesClosed,
   });
 
   return (
     <main>
-      <VideoDisplay
-        ref={videoRef}
-        setVideoDisplayed={setVideoDisplayed}
-        onButtonPress={resetAllAudio}
-      />
-      <BlinkStateTestDisplay
-        estimateFps={estimateFps}
-        currentSignal={currentSignal}
-        currentChar={currentChar}
-        currentWord={currentWord}
-        text={text}
-      />
+      <MaxWidthWrapper>
+        <VideoDisplay
+          ref={videoRef}
+          setVideoDisplayed={setVideoDisplayed}
+          onButtonPress={resetAllAudio}
+        />
+        <label htmlFor="eyesClosedBox">
+          Eyes Closed {eyesClosed ? "Yes " : "No "}
+          <input
+            id="eyesClosedBox"
+            type="checkbox"
+            checked={eyesClosed}
+            onChange={(event) => setEyesClosed(event.target.checked)}
+            ref={eyesClosedRef}
+          />
+        </label>
+        <BlinkStateTestDisplay
+          estimateFps={estimateFps}
+          currentSignal={currentSignal}
+          currentChar={currentChar}
+          currentWord={currentWord}
+          text={text}
+        />
+        <CurrentSignalDisplay currentSignal={currentSignal} />
+      </MaxWidthWrapper>
     </main>
   );
 }
+
+const MaxWidthWrapper = styled.div`
+  max-width: 400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: silver;
+`;
 
 export default App;
