@@ -10,7 +10,6 @@ function CurrentSignalDisplay({ currentSignal }) {
   } else if (currentSignal.state === "." && currentSignal.count === 1) {
     second = "dot";
   } else if (currentSignal.state === "." && currentSignal.count === 2) {
-    // nroyalty: THIS DOESN"T WORK
     first = "dash-left";
     second = "dash-center";
   } else if (currentSignal.state === "-") {

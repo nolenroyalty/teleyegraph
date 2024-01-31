@@ -24,7 +24,6 @@ function BlinkStateTestDisplay({
       <ul>
         {[
           ["Estimated FPS", estimateFps()],
-          ["currentSignal", currentSignal.state],
           ["currentChar", currentChar],
           ["currentWord", currentWord],
         ].map(([label, data]) => {

@@ -22,6 +22,7 @@ function SignalDisplay({ state }) {
       style["--border-radius"] = "0";
     } else if (state === "dash-right") {
       style["--border-radius"] = "0 50% 50% 0";
+      style["--translate-x"] = "-2px";
     }
   }
 
@@ -32,7 +33,7 @@ const Signal = styled.span`
   display: block;
   width: 100%;
   height: 100%;
-  transform: scale(var(--scale, 1));
+  transform: scale(var(--scale, 1)) translateX(var(--translate-x, 0));
   background-color: var(--signal-color);
 
   will-change: border-radius, transform, opacity;

@@ -9,6 +9,7 @@ import useProcessTick from "../../hooks/use-process-tick";
 import useSound from "../../hooks/use-sound";
 import { decodeMorse } from "../../utils";
 import CurrentSignalDisplay from "../CurrentSignalDisplay";
+import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import styled from "styled-components";
 
 function App() {
@@ -132,6 +133,7 @@ function App() {
           text={text}
         />
         <CurrentSignalDisplay currentSignal={currentSignal} />
+        <CurrentCharacterDisplay currentChar={currentChar} />
       </MaxWidthWrapper>
     </main>
   );
