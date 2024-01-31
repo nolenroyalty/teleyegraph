@@ -9,7 +9,7 @@ function RowDisplay({ label, data }) {
 }
 
 const TextDisplay = React.memo(({ text }) => {
-  return <p>foo {text}</p>;
+  return <p>{text}</p>;
 });
 
 function BlinkStateTestDisplay({
