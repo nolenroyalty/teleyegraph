@@ -23,25 +23,15 @@ function CurrentWordDisplay({ currentWord, candidateChar, fadeCount }) {
     );
   };
 
-  // let color = COLORS.black;
-  // if (fadeCount === DITS_TO_ADD_WORD - 1) {
-  //   color = COLORS["grey-40"];
-  // } else if (fadeCount === DITS_TO_ADD_WORD - 2) {
-  //   color = COLORS["grey-30"];
-  // } else if (fadeCount === DITS_TO_ADD_WORD - 3) {
-  //   color = COLORS["grey-20"];
-  // }
-
   return (
     <Wrapper style={{ "--opacity": calculateSelfOpacity(fadeCount) }}>
       {currentWord}
-      SOS
       <Candidate
         style={{
           "--opacity": calculateCandidateOpacity(candidateChar.count) + 0.1,
         }}
       >
-        C{candidateChar.char}
+        {candidateChar.char}
       </Candidate>
     </Wrapper>
   );
@@ -62,14 +52,14 @@ const Wrapper = styled.p`
     .5 - divide by two because of padding on each side
     2px - optical alignment.
   */
-  padding: 10px calc((100% / 15) * 0.75 * 0.5 * 0.5 - 2px);
+  padding: 0 calc((100% / 15) * 0.75 * 0.5 * 0.5 - 2px);
   opacity: var(--opacity);
   will-change: color, opacity;
   transition:
     color 200ms ease,
     opacity 200ms ease;
   font-size: 2em;
-  min-height: 2em;
+  /* min-height: 2em; */
 `;
 
 export default CurrentWordDisplay;

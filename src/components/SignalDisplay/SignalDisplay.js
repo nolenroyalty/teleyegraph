@@ -6,20 +6,20 @@ function SignalDisplay({ state, color = COLORS["black"] }) {
   const style = { "--opacity": 1, "--color": color };
   if (state === "dot") {
     style["--border-radius"] = "50%";
-    style["--scale"] = "0.75, 0.75";
+    style["--scale"] = "1";
   } else if (state === "none") {
     style["--opacity"] = "0";
     style["--scale"] = "0, 0";
     style["--border-radius"] = "25%";
   } else {
-    style["--scale"] = ".75, .75";
+    style["--scale"] = "1";
 
     if (state === "dash-left") {
       style["--border-radius"] = "50% 0 0 50%";
     } else if (state === "dash-center") {
       style["--border-radius"] = "0";
       // Without this we sometimes get a tiny gap between the center and the left or right
-      style["--scale"] = "1.35, .75";
+      style["--scale"] = "1.35, 1";
     } else if (state === "dash-right") {
       style["--border-radius"] = "0 50% 50% 0";
     }

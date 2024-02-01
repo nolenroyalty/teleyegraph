@@ -33,20 +33,26 @@ function CurrentSignalDisplay({ currentSignal }) {
 }
 
 const Wrapper = styled.div`
-  padding: 40px 0px;
-
+  /* aspect-ratio: 3/1; */
+  /* max-height: 100%; */
+  height: 100%;
+  width: 100%;
   display: grid;
-  place-items: center;
+  place-content: center;
 `;
 
 const DisplayGrid = styled.div`
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
-  width: 75%;
+  background: none;
+
   grid-template-columns: repeat(3, 1fr);
-  aspect-ratio: 3/1;
   display: grid;
   justify-content: center;
   align-items: center;
+
+  aspect-ratio: 3/1;
+  max-height: 100%;
+  width: min(400px, calc((100vw - 64px)));
 `;
 
 export default CurrentSignalDisplay;

@@ -12,7 +12,9 @@ function CurrentTextDisplay({ text, candidateWord }) {
   return (
     <Wrapper>
       {text}
-      LOREM IPSUM IS SOME HELPER TEXT MAN
+      LOREM IPSUM IS SOME HELPER TEXT MAN foo bar baz wahooo wahoo LOREM IPSUM
+      IS SOME HELPER TEXT MAN foo bar baz wahooo wahoo IS SOME HELPER TEXT MAN
+      foo bar baz wahooo wahoo
       <Candidate
         style={{ "--opacity": calculateOpacity(candidateWord.count) + 0.1 }}
       >
@@ -41,6 +43,7 @@ const Wrapper = styled.p`
     1px - optical alignment.
   */
   padding: 10px calc((100% / 15) * 0.75 * 0.5 * 0.5 - 1px);
+  overflow: auto;
 `;
 
 export default CurrentTextDisplay;

@@ -11,6 +11,7 @@ import CurrentSignalDisplay from "../CurrentSignalDisplay";
 import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import CurrentWordDisplay from "../CurrentWordDisplay";
 import CurrentTextDisplay from "../CurrentTextDisplay";
+import TelegraphButton from "../TelegraphButton";
 import styled from "styled-components";
 import {
   MAX_SIGNALS_IN_CHAR,
@@ -183,35 +184,24 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
         <Header>
           <Title>tel👁️graph</Title>
         </Header>
-        <Main>
-          <VideoDisplay
-            videoRef={videoRef}
-            videoDisplayed={videoDisplayed}
-            setVideoDisplayed={setVideoDisplayed}
-            onButtonPress={resetAllAudio}
-          />
-          <label htmlFor="eyesClosedBox">
-            Eyes Closed {eyesClosed ? "Yes " : "No "}
-            <input
-              id="eyesClosedBox"
-              type="checkbox"
-              checked={eyesClosed}
-              onChange={(event) => setEyesClosed(event.target.checked)}
-              ref={eyesClosedRef}
-            />
-          </label>
-          <CurrentSignalDisplay currentSignal={currentSignal} />
-          <CurrentCharacterDisplay
-            currentChar={currentChar}
-            fadeCount={candidateChar.count}
-          />
-          <CurrentWordDisplay
-            currentWord={currentWord}
-            candidateChar={candidateChar}
-            fadeCount={candidateWord.count}
-          />
-          <CurrentTextDisplay text={text} candidateWord={candidateWord} />
-        </Main>
+        <VideoDisplay
+          videoRef={videoRef}
+          videoDisplayed={videoDisplayed}
+          setVideoDisplayed={setVideoDisplayed}
+          onButtonPress={resetAllAudio}
+        />
+        <CurrentSignalDisplay currentSignal={currentSignal} />
+        <CurrentCharacterDisplay
+          currentChar={currentChar}
+          fadeCount={candidateChar.count}
+        />
+        <CurrentWordDisplay
+          currentWord={currentWord}
+          candidateChar={candidateChar}
+          fadeCount={candidateWord.count}
+        />
+        <CurrentTextDisplay text={text} candidateWord={candidateWord} />
+        <TelegraphButton setEyesClosed={setEyesClosed} />
       </MaxWidthWrapper>
     </Background>
   );
@@ -224,10 +214,9 @@ const Header = styled.header`
 
 const Title = styled.h1``;
 
-const Main = styled.main``;
-
 const Background = styled.div`
   min-height: 100%;
+  /* height: 100%; */
   width: 100%;
   background-image: linear-gradient(
     235deg,
@@ -240,10 +229,14 @@ const MaxWidthWrapper = styled.div`
   max-width: 800px;
   height: 100%;
   padding: 2em 2em;
-  height: 100%;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  gap: 8px;
+
+  grid-template-rows:
+    [header] 3em [video] minmax(16em, 2fr)
+    [mainsignal] minmax(8em, 1fr)
+    [charsignal] 4em [word] 2em [text] 8em [button] minmax(10%, 1fr);
 `;
 
 export default App;

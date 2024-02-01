@@ -31,12 +31,9 @@ function VideoDisplay({
 
   return (
     <Wrapper videoDisplayed={videoDisplayed}>
-      <Video
-        videoDisplayed={videoDisplayed}
-        ref={videoRef}
-        autoPlay
-        muted
-      ></Video>
+      <VideoWrapper videoDisplayed={videoDisplayed}>
+        <Video videoDisplayed={videoDisplayed} ref={videoRef} autoPlay muted />
+      </VideoWrapper>
       <Button disabled={buttonPressed} onClick={enableCam}>
         Enable Video
       </Button>
@@ -70,23 +67,31 @@ const Button = styled.button`
   transition: opacity 0.3s ease;
 `;
 
-const Wrapper = styled.div`
-  max-width: 450px;
+const VideoWrapper = styled.div`
   aspect-ratio: 3/2;
-
+  width: 67%;
+  max-height: 100%;
+  /* margin: 0 auto; */
   background-color: ${(p) =>
     p.videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
   will-change: background-color;
   transition: background-color 0.3s ease;
-  margin: 1em auto 1em;
+`;
+
+const Wrapper = styled.div`
+  width: 100%;
+  height: 100%;
+
   position: relative;
   display: grid;
-  place-content: center;
+  grid-template-rows: 100%;
+  grid-template-columns: 100%;
+  place-items: center;
 `;
 
 const Video = styled.video`
-  width: 100%;
   aspect-ratio: 3/2;
+  max-height: 100%;
   margin: 0 auto;
   display: block;
   will-change: opacity;
