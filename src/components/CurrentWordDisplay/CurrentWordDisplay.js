@@ -35,10 +35,13 @@ function CurrentWordDisplay({ currentWord, candidateChar, fadeCount }) {
   return (
     <Wrapper style={{ "--opacity": calculateSelfOpacity(fadeCount) }}>
       {currentWord}
+      SOS
       <Candidate
-        style={{ "--opacity": calculateCandidateOpacity(candidateChar.count) }}
+        style={{
+          "--opacity": calculateCandidateOpacity(candidateChar.count) + 0.1,
+        }}
       >
-        {candidateChar.char}
+        C{candidateChar.char}
       </Candidate>
     </Wrapper>
   );
@@ -51,7 +54,15 @@ const Candidate = styled.span`
 `;
 
 const Wrapper = styled.p`
-  /* color: var(--color); */
+  /*
+    100% - width of above grid
+    15 - cells in grid
+    .75 - scale of a circle
+    .5 - divide by two to get radius
+    .5 - divide by two because of padding on each side
+    2px - optical alignment.
+  */
+  padding: 10px calc((100% / 15) * 0.75 * 0.5 * 0.5 - 2px);
   opacity: var(--opacity);
   will-change: color, opacity;
   transition:
@@ -59,7 +70,6 @@ const Wrapper = styled.p`
     opacity 200ms ease;
   font-size: 2em;
   min-height: 2em;
-  background: slateblue;
 `;
 
 export default CurrentWordDisplay;

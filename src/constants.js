@@ -8,4 +8,6 @@ export const COLORS = {
   "grey-30": "var(--color-grey-30)",
   "grey-40": "var(--color-grey-40)",
   "grey-50": "var(--color-grey-50)",
+  white: "var(--color-white)",
+  primary: "var(--color-primary)",
 };

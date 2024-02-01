@@ -12,14 +12,14 @@ function SignalDisplay({ state, color = COLORS["black"] }) {
     style["--scale"] = "0, 0";
     style["--border-radius"] = "25%";
   } else {
-    style["--scale"] = "1, 1";
+    style["--scale"] = ".75, .75";
 
     if (state === "dash-left") {
       style["--border-radius"] = "50% 0 0 50%";
     } else if (state === "dash-center") {
       style["--border-radius"] = "0";
       // Without this we sometimes get a tiny gap between the center and the left or right
-      style["--scale"] = "1.1, 1";
+      style["--scale"] = "1.35, .75";
     } else if (state === "dash-right") {
       style["--border-radius"] = "0 50% 50% 0";
     }
@@ -31,7 +31,8 @@ function SignalDisplay({ state, color = COLORS["black"] }) {
 const Signal = styled.span`
   display: block;
   width: 100%;
-  height: 100%;
+
+  aspect-ratio: 1/1;
   transform: scale(var(--scale, 1)) translateX(var(--translate-x, 0));
   background-color: var(--color);
 

@@ -58,7 +58,8 @@ export function decodeMorse(currentDurations) {
   };
 
   if (currentDurations in ref) {
-    return ref[currentDurations];
+    // return uppercased string
+    return ref[currentDurations].toUpperCase();
   } else {
     console.warn(`no match for ${currentDurations}`);
     return null;

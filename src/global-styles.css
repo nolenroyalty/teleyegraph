@@ -18,7 +18,10 @@ body {
   --color-grey-20: hsl(240, 15%, 20%);
   --color-grey-30: hsl(240, 15%, 30%);
   --color-grey-40: hsl(240, 15%, 40%);
-  --color-grey-50: hsl(240, 15%, 50%);
+  --color-grey-50: hsl(240, 10%, 50%);
+  --color-white: hsl(240, 15%, 90%);
+
+  --color-primary: hsl(271, 65%, 45%);
 
   color: var(--color-black);
 }
@@ -26,6 +29,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   font-family: "Lato", sans-serif;
+  font-weight: 400;
 }
 img,
 picture,

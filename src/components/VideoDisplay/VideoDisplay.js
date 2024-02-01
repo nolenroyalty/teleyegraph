@@ -1,16 +1,97 @@
 import React from "react";
 import styled from "styled-components";
+import { COLORS } from "../../constants";
 
-function VideoDisplay({}, ref) {
+function VideoDisplay({
+  videoRef,
+  setVideoDisplayed,
+  videoDisplayed,
+  onButtonPress,
+}) {
   console.log("VIDEO RENDER");
+  const [buttonPressed, setButtonPressed] = React.useState(false);
+  const enableCam = React.useCallback(() => {
+    onButtonPress();
+    setButtonPressed(true);
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
+      .then((stream) => {
+        videoRef.current.srcObject = stream;
+        const listener = (event) => {
+          setVideoDisplayed(true);
+          videoRef.current.removeEventListener("loadeddata", listener);
+        };
 
-  return <Video ref={ref} autoPlay muted></Video>;
+        videoRef.current.addEventListener("loadeddata", listener);
+      })
+      .catch((err) => {
+        console.log(`couldn't set up cam: ${err}`);
+      });
+  }, [setVideoDisplayed, onButtonPress, videoRef]);
+
+  return (
+    <Wrapper videoDisplayed={videoDisplayed}>
+      <Video
+        videoDisplayed={videoDisplayed}
+        ref={videoRef}
+        autoPlay
+        muted
+      ></Video>
+      <Button disabled={buttonPressed} onClick={enableCam}>
+        Enable Video
+      </Button>
+    </Wrapper>
+  );
 }
 
-const Video = styled.video`
-  width: 200px;
-  height: 200px;
-  margin: 100px auto 20px;
+const Button = styled.button`
+  width: fit-content;
+  padding: 5px 20px;
+  border: none;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto auto;
+  height: fit-content;
+  box-shadow: 2px 2px 8px 2px hsl(0deg 0% 0% / 0.3);
+  border-radius: 10px;
+  position: absolute;
+  font-size: 1.5em;
+  display: grid;
+  place-content: center;
+
+  color: ${COLORS["white"]};
+  background: ${COLORS["primary"]};
+
+  will-change: opacity;
+  pointer-events: ${(p) => (p.disabled ? "none" : "auto")};
+  opacity: ${(p) => (p.disabled ? 0 : 1)};
+  transition: opacity 0.3s ease;
 `;
 
-export default React.memo(React.forwardRef(VideoDisplay));
+const Wrapper = styled.div`
+  max-width: 450px;
+  aspect-ratio: 3/2;
+
+  background-color: ${(p) =>
+    p.videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
+  will-change: background-color;
+  transition: background-color 0.3s ease;
+  margin: 1em auto 1em;
+  position: relative;
+  display: grid;
+  place-content: center;
+`;
+
+const Video = styled.video`
+  width: 100%;
+  aspect-ratio: 3/2;
+  margin: 0 auto;
+  display: block;
+  will-change: opacity;
+  transition: opacity 2s ease;
+  opacity: ${(p) => (p.videoDisplayed ? 1 : 0)};
+`;
+
+export default React.memo(VideoDisplay);

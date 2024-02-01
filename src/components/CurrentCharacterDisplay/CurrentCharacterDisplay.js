@@ -11,6 +11,7 @@ function CurrentCharacterDisplay({ currentChar, fadeCount }) {
   } else if (fadeCount > 1) {
     color = COLORS["grey-30"];
   }
+  currentChar = "-..-";
 
   const addSignal = (state) => {
     arr.push(<SignalDisplay key={arr.length} state={state} color={color} />);
@@ -34,10 +35,10 @@ function CurrentCharacterDisplay({ currentChar, fadeCount }) {
 
 const Wrapper = styled.div`
   display: grid;
+  filter: drop-shadow(4px 5px 5px hsl(0deg 0% 0% / 0.35));
   grid-template-columns: repeat(15, 1fr);
-  grid-template-rows: 33% 67%;
-  aspect-ratio: 15/3;
-  background: slategrey;
+  width: 100%;
+  aspect-ratio: 15/1;
 `;
 
 export default React.memo(CurrentCharacterDisplay);

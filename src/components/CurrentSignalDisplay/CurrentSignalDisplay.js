@@ -17,16 +17,31 @@ function CurrentSignalDisplay({ currentSignal }) {
     second = "dash-center";
     third = "dash-right";
   }
+  first = "dash-left";
+  second = "dash-center";
+  third = "dash-right";
+
   return (
     <Wrapper>
-      <SignalDisplay state={first} />
-      <SignalDisplay state={second} />
-      <SignalDisplay state={third} />
+      <DisplayGrid>
+        <SignalDisplay state={first} />
+        <SignalDisplay state={second} />
+        <SignalDisplay state={third} />
+      </DisplayGrid>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
+  padding: 40px 0px;
+
+  display: grid;
+  place-items: center;
+`;
+
+const DisplayGrid = styled.div`
+  filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
+  width: 75%;
   grid-template-columns: repeat(3, 1fr);
   aspect-ratio: 3/1;
   display: grid;

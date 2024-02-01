@@ -1,8 +1,6 @@
 import React from "react";
 
 import VideoDisplay from "../VideoDisplay";
-import EnableVideoButton from "../EnableVideoButton";
-import BlinkStateTestDisplay from "../BlinkStateTestDisplay";
 
 import useLandmarker from "../../hooks/use-landmarker";
 import useProcessFrame from "../../hooks/use-process-frame";
@@ -18,6 +16,7 @@ import {
   MAX_SIGNALS_IN_CHAR,
   DITS_TO_ADD_CHARACTER,
   DITS_TO_ADD_WORD,
+  COLORS,
 } from "../../constants";
 
 function App() {
@@ -179,51 +178,72 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   });
 
   return (
-    <Main>
+    <Background>
       <MaxWidthWrapper>
-        <VideoDisplay ref={videoRef} />
-        <EnableVideoButton
-          videoRef={videoRef}
-          setVideoDisplayed={setVideoDisplayed}
-          onButtonPress={resetAllAudio}
-        />
-        <label htmlFor="eyesClosedBox">
-          Eyes Closed {eyesClosed ? "Yes " : "No "}
-          <input
-            id="eyesClosedBox"
-            type="checkbox"
-            checked={eyesClosed}
-            onChange={(event) => setEyesClosed(event.target.checked)}
-            ref={eyesClosedRef}
+        <Header>
+          <Title>tel👁️graph</Title>
+        </Header>
+        <Main>
+          <VideoDisplay
+            videoRef={videoRef}
+            videoDisplayed={videoDisplayed}
+            setVideoDisplayed={setVideoDisplayed}
+            onButtonPress={resetAllAudio}
           />
-        </label>
-        <CurrentSignalDisplay currentSignal={currentSignal} />
-        <CurrentCharacterDisplay
-          currentChar={currentChar}
-          fadeCount={candidateChar.count}
-        />
-        <CurrentWordDisplay
-          currentWord={currentWord}
-          candidateChar={candidateChar}
-          fadeCount={candidateWord.count}
-        />
-        <CurrentTextDisplay text={text} candidateWord={candidateWord} />
+          <label htmlFor="eyesClosedBox">
+            Eyes Closed {eyesClosed ? "Yes " : "No "}
+            <input
+              id="eyesClosedBox"
+              type="checkbox"
+              checked={eyesClosed}
+              onChange={(event) => setEyesClosed(event.target.checked)}
+              ref={eyesClosedRef}
+            />
+          </label>
+          <CurrentSignalDisplay currentSignal={currentSignal} />
+          <CurrentCharacterDisplay
+            currentChar={currentChar}
+            fadeCount={candidateChar.count}
+          />
+          <CurrentWordDisplay
+            currentWord={currentWord}
+            candidateChar={candidateChar}
+            fadeCount={candidateWord.count}
+          />
+          <CurrentTextDisplay text={text} candidateWord={candidateWord} />
+        </Main>
       </MaxWidthWrapper>
-    </Main>
+    </Background>
   );
 }
 
-const Main = styled.main`
-  height: 100%;
+const Header = styled.header`
+  text-align: center;
+  font-style: italic;
+`;
+
+const Title = styled.h1``;
+
+const Main = styled.main``;
+
+const Background = styled.div`
+  min-height: 100%;
+  width: 100%;
+  background-image: linear-gradient(
+    235deg,
+    ${COLORS["grey-40"]} 25%,
+    ${COLORS["grey-50"]} 80%
+  );
 `;
 
 const MaxWidthWrapper = styled.div`
-  max-width: 400px;
+  max-width: 800px;
+  height: 100%;
+  padding: 2em 2em;
   height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  background: silver;
 `;
 
 export default App;

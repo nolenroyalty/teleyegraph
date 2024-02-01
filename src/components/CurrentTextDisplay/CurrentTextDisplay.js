@@ -12,8 +12,11 @@ function CurrentTextDisplay({ text, candidateWord }) {
   return (
     <Wrapper>
       {text}
-      <Candidate style={{ "--opacity": calculateOpacity(candidateWord.count) }}>
-        {candidateWord.word}
+      LOREM IPSUM IS SOME HELPER TEXT MAN
+      <Candidate
+        style={{ "--opacity": calculateOpacity(candidateWord.count) + 0.1 }}
+      >
+        {candidateWord.word} CANDIDATE
       </Candidate>
     </Wrapper>
   );
@@ -27,8 +30,17 @@ const Candidate = styled.span`
 
 const Wrapper = styled.p`
   font-size: 1.5em;
-  background: lightpink;
-  min-height: 1em;
+  padding: 10px 8px;
+
+  /*
+    100% - width of above grid
+    15 - cells in grid
+    .75 - scale of a circle
+    .5 - divide by two to get radius
+    .5 - divide by two because of padding on each side
+    1px - optical alignment.
+  */
+  padding: 10px calc((100% / 15) * 0.75 * 0.5 * 0.5 - 1px);
 `;
 
 export default CurrentTextDisplay;
