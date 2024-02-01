@@ -5,24 +5,22 @@ function SignalDisplay({ state }) {
   const style = { "--opacity": 1 };
   if (state === "dot") {
     style["--border-radius"] = "50%";
-    style["--height"] = "100%";
     style["--scale"] = "0.75, 0.75";
   } else if (state === "none") {
     style["--opacity"] = "0";
     style["--scale"] = "0, 0";
     style["--border-radius"] = "25%";
   } else {
-    // TODO can this be a transform??
-    style["--height"] = "50%";
     style["--scale"] = "1, 1";
 
     if (state === "dash-left") {
       style["--border-radius"] = "50% 0 0 50%";
     } else if (state === "dash-center") {
       style["--border-radius"] = "0";
+      // Without this we sometimes get a tiny gap between the center and the left or right
+      style["--scale"] = "1.1, 1";
     } else if (state === "dash-right") {
       style["--border-radius"] = "0 50% 50% 0";
-      style["--translate-x"] = "-2px";
     }
   }
 
@@ -41,7 +39,6 @@ const Signal = styled.span`
   transition:
     border-radius 500ms ease-out,
     transform 500ms ease,
-    height 500ms ease,
     opacity 500ms ease;
 
   opacity: var(--opacity);

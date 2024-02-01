@@ -11,6 +11,7 @@ import { decodeMorse } from "../../utils";
 import CurrentSignalDisplay from "../CurrentSignalDisplay";
 import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import styled from "styled-components";
+import { MAX_SIGNALS_IN_CHAR } from "../../constants";
 
 function App() {
   const videoRef = React.useRef();
@@ -63,6 +64,13 @@ function App() {
       if (signalCount.current.off === 1) {
         if (currentSignal.state !== "none") {
           setCurrentChar((currentChar) => {
+            if (currentChar.length >= MAX_SIGNALS_IN_CHAR) {
+              console.warn(
+                `not adding ${currentSignal.state} because current character \
+already has ${MAX_SIGNALS_IN_CHAR} signals`
+              );
+              return currentChar;
+            }
             return [...currentChar, currentSignal.state];
           });
         }
@@ -125,15 +133,13 @@ function App() {
             ref={eyesClosedRef}
           />
         </label>
+        <CurrentSignalDisplay currentSignal={currentSignal} />
+        <CurrentCharacterDisplay currentChar={currentChar} />
         <BlinkStateTestDisplay
           estimateFps={estimateFps}
-          currentSignal={currentSignal}
-          currentChar={currentChar}
           currentWord={currentWord}
           text={text}
         />
-        <CurrentSignalDisplay currentSignal={currentSignal} />
-        <CurrentCharacterDisplay currentChar={currentChar} />
       </MaxWidthWrapper>
     </main>
   );
