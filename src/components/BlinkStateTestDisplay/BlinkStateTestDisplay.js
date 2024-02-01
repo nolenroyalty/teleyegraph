@@ -21,14 +21,6 @@ function BlinkStateTestDisplay({
 }) {
   return (
     <>
-      <ul>
-        {[
-          ["Estimated FPS", estimateFps()],
-          ["currentWord", currentWord],
-        ].map(([label, data]) => {
-          return <RowDisplay key={label} label={label} data={data} />;
-        })}
-      </ul>
       <TextDisplay text={text} />
     </>
   );

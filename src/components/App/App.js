@@ -11,8 +11,13 @@ import useSound from "../../hooks/use-sound";
 import { decodeMorse } from "../../utils";
 import CurrentSignalDisplay from "../CurrentSignalDisplay";
 import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
+import CurrentWordDisplay from "../CurrentWordDisplay";
 import styled from "styled-components";
-import { MAX_SIGNALS_IN_CHAR } from "../../constants";
+import {
+  MAX_SIGNALS_IN_CHAR,
+  DITS_TO_ADD_CHARACTER,
+  DITS_TO_ADD_WORD,
+} from "../../constants";
 
 function App() {
   const videoRef = React.useRef();
@@ -58,11 +63,25 @@ function App() {
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
   const [currentChar, setCurrentChar] = React.useState([]);
   const [currentWord, setCurrentWord] = React.useState("");
+  const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
   const [text, setText] = React.useState("");
   const [eyesClosed, setEyesClosed] = React.useState(false);
 
   const signalCount = React.useRef({ on: 0, off: 0 });
-
+  const resetCandidateChar = (clearChar) => {
+    /* Gross hack - we want to preserve nice fade-ins / outs when we
+       reset the character due to closing our eyes (so we don't want to clear
+       the current char so that it fades out) - but when we *add* the character
+       we want to make sure to clear the candidate so that we don't have two
+       chars on screen while the candidate fades. Oh well. */
+    if (clearChar) {
+      setCandidateChar({ count: 0 });
+    } else {
+      setCandidateChar((c) => {
+        return { ...c, count: 0 };
+      });
+    }
+  };
   function callOnTickTransition(decision) {
     if (decision === "open") {
       signalCount.current.on = 0;
@@ -78,11 +97,23 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
               );
               return currentChar;
             }
-            return [...currentChar, currentSignal.state];
+            const newChar = [...currentChar, currentSignal.state];
+            const decoded = decodeMorse(newChar.join(""));
+            if (decoded !== null) {
+              setCandidateChar({ char: decoded, count: 1 });
+            } else {
+              console.warn(`Error decoding candidate char ${newChar.join("")}`);
+            }
+            return newChar;
           });
         }
         setCurrentSignal({ state: "none" });
-      } else if (signalCount.current.off === 3) {
+      } else if (signalCount.current.off < DITS_TO_ADD_CHARACTER) {
+        setCandidateChar((currentSignal) => {
+          return { ...currentSignal, count: signalCount.current.off };
+        });
+      } else if (signalCount.current.off === DITS_TO_ADD_CHARACTER) {
+        resetCandidateChar(true);
         const decoded = decodeMorse(currentChar.join(""));
         if (decoded !== null) {
           playCymbal();
@@ -91,11 +122,12 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
           // nroyalty: HANDLE ERROR
         }
         setCurrentChar([]);
-      } else if (signalCount.current.off === 7) {
+      } else if (signalCount.current.off === DITS_TO_ADD_WORD) {
         setText((currentText) => `${currentText} ${currentWord}`);
         setCurrentWord("");
       }
     } else if (decision === "closed") {
+      resetCandidateChar();
       signalCount.current.off = 0;
       signalCount.current.on += 1;
 
@@ -142,6 +174,11 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
         </label>
         <CurrentSignalDisplay currentSignal={currentSignal} />
         <CurrentCharacterDisplay currentChar={currentChar} />
+        <CurrentWordDisplay
+          currentWord={currentWord}
+          candidateChar={candidateChar}
+        />
+
         <BlinkStateTestDisplay
           estimateFps={estimateFps}
           currentWord={currentWord}

@@ -2,22 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import SignalDisplay from "../SignalDisplay";
 
-function range(start, end, step = 1) {
-  if (end === undefined) {
-    end = start;
-    start = 0;
-  }
-
-  const length = Math.max(Math.ceil((end - start) / step), 0);
-  const range = Array(length);
-
-  for (let idx = 0; idx < length; idx++, start += step) {
-    range[idx] = start;
-  }
-
-  return range;
-}
-
 function CurrentCharacterDisplay({ currentChar }) {
   const arr = [];
   let count = 0;
@@ -52,4 +36,4 @@ const Wrapper = styled.div`
   background: slategrey;
 `;
 
-export default CurrentCharacterDisplay;
+export default React.memo(CurrentCharacterDisplay);
