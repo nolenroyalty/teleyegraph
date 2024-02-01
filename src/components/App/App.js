@@ -12,6 +12,7 @@ import { decodeMorse } from "../../utils";
 import CurrentSignalDisplay from "../CurrentSignalDisplay";
 import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import CurrentWordDisplay from "../CurrentWordDisplay";
+import CurrentTextDisplay from "../CurrentTextDisplay";
 import styled from "styled-components";
 import {
   MAX_SIGNALS_IN_CHAR,
@@ -64,6 +65,7 @@ function App() {
   const [currentChar, setCurrentChar] = React.useState([]);
   const [currentWord, setCurrentWord] = React.useState("");
   const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
+  const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
   const [text, setText] = React.useState("");
   const [eyesClosed, setEyesClosed] = React.useState(false);
 
@@ -102,6 +104,10 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
             if (decoded !== null) {
               setCandidateChar({ char: decoded, count: 1 });
             } else {
+              // HACK and gross edge case - this means we've written out an invalid
+              // character and I'm not sure how to show that well in the UI. For now
+              // I guess we set the candidate char to a warning?
+              setCandidateChar({ char: "⁉️", count: 1 });
               console.warn(`Error decoding candidate char ${newChar.join("")}`);
             }
             return newChar;
@@ -117,17 +123,36 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
         const decoded = decodeMorse(currentChar.join(""));
         if (decoded !== null) {
           playCymbal();
-          setCurrentWord((currentWord) => currentWord + decoded);
+          setCurrentWord((currentWord) => {
+            const newWord = currentWord + decoded;
+            setCandidateWord({
+              count: signalCount.current.off,
+              word: " " + newWord,
+            });
+            return newWord;
+          });
         } else {
           // nroyalty: HANDLE ERROR
         }
         setCurrentChar([]);
+      } else if (
+        signalCount.current.off > DITS_TO_ADD_CHARACTER &&
+        signalCount.current.off < DITS_TO_ADD_WORD
+      ) {
+        setCandidateWord((currentWord) => {
+          return { ...currentWord, count: signalCount.current.off };
+        });
       } else if (signalCount.current.off === DITS_TO_ADD_WORD) {
         setText((currentText) => `${currentText} ${currentWord}`);
         setCurrentWord("");
+        setCandidateWord({ count: 0 });
       }
     } else if (decision === "closed") {
       resetCandidateChar();
+      setCandidateWord((current) => {
+        // same fading hack as above
+        return { ...current, count: 0 };
+      });
       signalCount.current.off = 0;
       signalCount.current.on += 1;
 
@@ -154,7 +179,7 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   });
 
   return (
-    <main>
+    <Main>
       <MaxWidthWrapper>
         <VideoDisplay ref={videoRef} />
         <EnableVideoButton
@@ -173,24 +198,28 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
           />
         </label>
         <CurrentSignalDisplay currentSignal={currentSignal} />
-        <CurrentCharacterDisplay currentChar={currentChar} />
+        <CurrentCharacterDisplay
+          currentChar={currentChar}
+          fadeCount={candidateChar.count}
+        />
         <CurrentWordDisplay
           currentWord={currentWord}
           candidateChar={candidateChar}
+          fadeCount={candidateWord.count}
         />
-
-        <BlinkStateTestDisplay
-          estimateFps={estimateFps}
-          currentWord={currentWord}
-          text={text}
-        />
+        <CurrentTextDisplay text={text} candidateWord={candidateWord} />
       </MaxWidthWrapper>
-    </main>
+    </Main>
   );
 }
 
+const Main = styled.main`
+  height: 100%;
+`;
+
 const MaxWidthWrapper = styled.div`
   max-width: 400px;
+  height: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

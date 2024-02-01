@@ -14,7 +14,13 @@ html,
 body {
   height: 100%;
 
-  --signal-color: black;
+  --color-black: hsla(240, 15%, 10%, 1);
+  --color-grey-20: hsl(240, 15%, 20%);
+  --color-grey-30: hsl(240, 15%, 30%);
+  --color-grey-40: hsl(240, 15%, 40%);
+  --color-grey-50: hsl(240, 15%, 50%);
+
+  color: var(--color-black);
 }
 body {
   line-height: 1.5;
@@ -46,5 +52,6 @@ h6 {
 }
 #root,
 #__next {
+  height: 100%;
   isolation: isolate;
 }

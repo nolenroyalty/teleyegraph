@@ -1,8 +1,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { COLORS } from "../../constants";
 
-function SignalDisplay({ state }) {
-  const style = { "--opacity": 1 };
+function SignalDisplay({ state, color = COLORS["black"] }) {
+  const style = { "--opacity": 1, "--color": color };
   if (state === "dot") {
     style["--border-radius"] = "50%";
     style["--scale"] = "0.75, 0.75";
@@ -32,14 +33,15 @@ const Signal = styled.span`
   width: 100%;
   height: 100%;
   transform: scale(var(--scale, 1)) translateX(var(--translate-x, 0));
-  background-color: var(--signal-color);
+  background-color: var(--color);
 
-  will-change: border-radius, transform, opacity;
+  will-change: border-radius, transform, opacity, background-color;
 
   transition:
     border-radius 500ms ease-out,
     transform 500ms ease,
-    opacity 500ms ease;
+    opacity 500ms ease,
+    background-color 500ms ease;
 
   opacity: var(--opacity);
   border-radius: var(--border-radius);

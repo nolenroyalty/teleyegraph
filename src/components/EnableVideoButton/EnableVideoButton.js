@@ -20,7 +20,6 @@ function EnableVideoButton({ videoRef, setVideoDisplayed, onButtonPress }) {
 const Button = styled.button`
   width: fit-content;
   padding: 5px 20px;
-  height: 100%;
   margin: 20px auto 20px;
   border: 1px solid black;
   border-radius: 10px;

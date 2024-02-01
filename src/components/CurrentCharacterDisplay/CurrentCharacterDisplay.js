@@ -1,28 +1,32 @@
 import React from "react";
 import styled from "styled-components";
 import SignalDisplay from "../SignalDisplay";
+import { COLORS } from "../../constants";
 
-function CurrentCharacterDisplay({ currentChar }) {
+function CurrentCharacterDisplay({ currentChar, fadeCount }) {
   const arr = [];
-  let count = 0;
+  let color = COLORS["black"];
+  if (fadeCount === 1) {
+    color = COLORS["grey-20"];
+  } else if (fadeCount > 1) {
+    color = COLORS["grey-30"];
+  }
+
+  const addSignal = (state) => {
+    arr.push(<SignalDisplay key={arr.length} state={state} color={color} />);
+  };
+
   for (const c of currentChar) {
     if (c === ".") {
-      arr.push(<SignalDisplay key={count} state={"dot"} />);
-      count += 1;
+      addSignal("dot");
     } else if (c === "-") {
-      arr.push(<SignalDisplay key={count} state={"dash-left"} />);
-      count += 1;
-      arr.push(<SignalDisplay key={count} state={"dash-center"} />);
-      count += 1;
-      arr.push(<SignalDisplay key={count} state={"dash-right"} />);
-      count += 1;
+      ["dash-left", "dash-center", "dash-right"].forEach(addSignal);
     } else {
       console.warn(`UNKNOWN CHAR ${c}`);
     }
   }
   while (arr.length < 15) {
-    arr.push(<SignalDisplay key={count} state={"none"} />);
-    count += 1;
+    addSignal("none");
   }
 
   return <Wrapper>{arr}</Wrapper>;
