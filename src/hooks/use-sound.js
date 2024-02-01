@@ -4,6 +4,7 @@ function useSound({ audioPath, addAudioDependency, removeAudioDependency }) {
   const audio = React.useRef(new Audio());
 
   const resetAudioPath = React.useCallback(() => {
+    console.log("RESET AUDIO PATH");
     audio.current.src = audioPath;
   }, [audioPath]);
 

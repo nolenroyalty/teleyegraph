@@ -1,6 +1,7 @@
 import React from "react";
 
 import VideoDisplay from "../VideoDisplay";
+import EnableVideoButton from "../EnableVideoButton";
 import BlinkStateTestDisplay from "../BlinkStateTestDisplay";
 
 import useLandmarker from "../../hooks/use-landmarker";
@@ -28,17 +29,23 @@ function App() {
     });
   }, []);
 
-  const { play: playBlock } = useSound({
-    audioPath: "/block.mp3",
-    addAudioDependency,
-    removeAudioDependency,
-  });
+  const { play: playBlock } = useSound(
+    {
+      audioPath: "/block.mp3",
+      addAudioDependency,
+      removeAudioDependency,
+    },
+    []
+  );
 
-  const { play: playCymbal } = useSound({
-    audioPath: "/cymbal.mp3",
-    addAudioDependency,
-    removeAudioDependency,
-  });
+  const { play: playCymbal } = useSound(
+    {
+      audioPath: "/cymbal.mp3",
+      addAudioDependency,
+      removeAudioDependency,
+    },
+    []
+  );
 
   const resetAllAudio = React.useCallback(() => {
     audioDependencies.forEach(({ resetAudioPath }) => {
@@ -95,7 +102,6 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
       if (signalCount.current.on === 3) {
         setCurrentSignal({ state: "-" });
       } else if (signalCount.current.on < 3) {
-        console.log("on", signalCount.current.on);
         setCurrentSignal({ state: ".", count: signalCount.current.on });
       }
     }
@@ -118,8 +124,9 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   return (
     <main>
       <MaxWidthWrapper>
-        <VideoDisplay
-          ref={videoRef}
+        <VideoDisplay ref={videoRef} />
+        <EnableVideoButton
+          videoRef={videoRef}
           setVideoDisplayed={setVideoDisplayed}
           onButtonPress={resetAllAudio}
         />
