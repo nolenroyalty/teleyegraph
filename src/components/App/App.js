@@ -66,7 +66,9 @@ function App() {
   const [currentWord, setCurrentWord] = React.useState("");
   const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
-  const [text, setText] = React.useState("");
+  const [text, setText] = React.useState(
+    "aExample text Example text Example text Example text Example text Example text Example text Example text Exampfele text Example text Example text Example text "
+  );
   const [eyesClosed, setEyesClosed] = React.useState(false);
 
   const signalCount = React.useRef({ on: 0, off: 0 });
@@ -179,31 +181,29 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   });
 
   return (
-    <Background>
-      <MaxWidthWrapper>
-        <Header>
-          <Title>tel👁️graph</Title>
-        </Header>
-        <VideoDisplay
-          videoRef={videoRef}
-          videoDisplayed={videoDisplayed}
-          setVideoDisplayed={setVideoDisplayed}
-          onButtonPress={resetAllAudio}
-        />
-        <CurrentSignalDisplay currentSignal={currentSignal} />
-        <CurrentCharacterDisplay
-          currentChar={currentChar}
-          fadeCount={candidateChar.count}
-        />
-        <CurrentWordDisplay
-          currentWord={currentWord}
-          candidateChar={candidateChar}
-          fadeCount={candidateWord.count}
-        />
-        <CurrentTextDisplay text={text} candidateWord={candidateWord} />
-        <TelegraphButton setEyesClosed={setEyesClosed} />
-      </MaxWidthWrapper>
-    </Background>
+    <MaxWidthWrapper>
+      <Header>
+        <Title>tel👁️graph</Title>
+      </Header>
+      <VideoDisplay
+        videoRef={videoRef}
+        videoDisplayed={videoDisplayed}
+        setVideoDisplayed={setVideoDisplayed}
+        onButtonPress={resetAllAudio}
+      />
+      <CurrentSignalDisplay currentSignal={currentSignal} />
+      <CurrentCharacterDisplay
+        currentChar={currentChar}
+        fadeCount={candidateChar.count}
+      />
+      <CurrentWordDisplay
+        currentWord={currentWord}
+        candidateChar={candidateChar}
+        fadeCount={candidateWord.count}
+      />
+      <CurrentTextDisplay text={text} candidateWord={candidateWord} />
+      <TelegraphButton setEyesClosed={setEyesClosed} />
+    </MaxWidthWrapper>
   );
 }
 
@@ -214,28 +214,22 @@ const Header = styled.header`
 
 const Title = styled.h1``;
 
-const Background = styled.div`
-  min-height: 100%;
-  width: 100%;
-  background-image: linear-gradient(
-    235deg,
-    ${COLORS["grey-40"]} 25%,
-    ${COLORS["grey-50"]} 80%
-  );
-`;
-
 const MaxWidthWrapper = styled.div`
   max-width: 800px;
+  width: min(100vw, 800px);
   height: 100%;
   padding: 2em 2em;
   margin: 0 auto;
   display: grid;
-  gap: 8px;
+  gap: calc(8px + 1vh);
+  align-content: space-between;
 
   grid-template-rows:
-    [header] 75px [video] 250px
-    [mainsignal] 100px
-    [charsignal] 4em [word] 2.5em [text] 7.5em [button] 100px;
+    [header] 3em [video] minmax(150px, 500px)
+    [mainsignal] minmax(75px, 200px)
+    [charsignal] 3em [word] 2.5em [text] 7.5em [button] 100px;
+
+  grid-template-columns: min(100vw - 4em, 800px - 4em);
 `;
 
 export default App;

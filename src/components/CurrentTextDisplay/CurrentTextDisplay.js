@@ -13,11 +13,28 @@ function CurrentTextDisplay({ text, candidateWord }) {
     return val === 0 ? 0 : val + 0.1;
   };
 
+  // React.useEffect(() => {
+  //   if (candidateRef.current && containerRef.current) {
+  //     const { scrollHeight, clientHeight } = containerRef.current;
+  //     if (scrollHeight > clientHeight) {
+  //       candidateRef.current.scrollIntoView({ behavior: "smooth" });
+  //     }
+  //   }
+  // }, [text, candidateWord.word]);
+
   React.useEffect(() => {
-    if (candidateRef.current && containerRef.current) {
+    if (containerRef.current) {
       const { scrollHeight, clientHeight } = containerRef.current;
-      if (scrollHeight > clientHeight) {
-        candidateRef.current.scrollIntoView({ behavior: "smooth" });
+      if (
+        scrollHeight > clientHeight &&
+        containerRef.current.scrollTop !== scrollHeight
+      ) {
+        console.log({
+          scrollHeight,
+          clientHeight,
+          scrollTop: containerRef.current.scrollTop,
+        });
+        containerRef.current.scrollTop = containerRef.current.scrollHeight;
       }
     }
   }, [text, candidateWord.word]);
@@ -44,6 +61,7 @@ const Candidate = styled.span`
 const Wrapper = styled.p`
   font-size: 1.5em;
   padding: 10px 8px;
+  scroll-behavior: smooth;
 
   /*
     100% - width of above grid

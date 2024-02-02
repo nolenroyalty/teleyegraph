@@ -37,10 +37,12 @@ function CurrentSignalDisplay({ currentSignal }) {
 }
 
 const Wrapper = styled.div`
+  --padding: max(2vh, 2vw);
   display: grid;
-  grid-template-columns: repeat(3, var(--target-size));
-  grid-template-rows: var(--target-size);
+  grid-template-columns: repeat(3, calc(var(--target-size) - var(--padding)));
+  grid-template-rows: calc(var(--target-size) - var(--padding));
   justify-content: center;
+  align-content: center;
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
 `;
 

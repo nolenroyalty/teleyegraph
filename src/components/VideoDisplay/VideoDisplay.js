@@ -30,13 +30,13 @@ function VideoDisplay({
   }, [setVideoDisplayed, onButtonPress, videoRef]);
 
   return (
-    <Wrapper videoDisplayed={videoDisplayed}>
-      <VideoWrapper videoDisplayed={videoDisplayed}>
-        <Video videoDisplayed={videoDisplayed} ref={videoRef} autoPlay muted />
+    <Wrapper>
+      <VideoWrapper $videoDisplayed={videoDisplayed}>
+        <Video $videoDisplayed={videoDisplayed} ref={videoRef} autoPlay muted />
+        <Button disabled={buttonPressed} onClick={enableCam}>
+          Enable Video
+        </Button>
       </VideoWrapper>
-      <Button disabled={buttonPressed} onClick={enableCam}>
-        Enable Video
-      </Button>
     </Wrapper>
   );
 }
@@ -68,23 +68,22 @@ const Button = styled.button`
 `;
 
 const VideoWrapper = styled.div`
-  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
   background-color: ${(p) =>
-    p.videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
+    p.$videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
   will-change: background-color;
   transition: background-color 0.3s ease;
   aspect-ratio: 16/9;
+  margin: 0 auto;
+  position: relative;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
 
-  position: relative;
-  display: grid;
-  grid-template-rows: 100%;
-  grid-template-columns: 100%;
-  place-items: center;
+  /* position: relative; */
 `;
 
 const Video = styled.video`
@@ -93,7 +92,7 @@ const Video = styled.video`
   display: block;
   will-change: opacity;
   transition: opacity 1s ease;
-  opacity: ${(p) => (p.videoDisplayed ? 1 : 0)};
+  opacity: ${(p) => (p.$videoDisplayed ? 1 : 0)};
 `;
 
 export default React.memo(VideoDisplay);
