@@ -68,13 +68,12 @@ const Button = styled.button`
 `;
 
 const VideoWrapper = styled.div`
-  aspect-ratio: 3/2;
-  max-height: 100%;
-  height: min(25vh, 16em);
+  height: 100%;
   background-color: ${(p) =>
     p.videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
   will-change: background-color;
   transition: background-color 0.3s ease;
+  aspect-ratio: 16/9;
 `;
 
 const Wrapper = styled.div`
@@ -89,14 +88,12 @@ const Wrapper = styled.div`
 `;
 
 const Video = styled.video`
-  aspect-ratio: 3/2;
   max-height: 100%;
   margin: 0 auto;
   display: block;
-  background: green;
   will-change: opacity;
-  transition: opacity 2s ease;
-  opacity: ${(p) => (p.videoDisplayed ? 1 : 1)};
+  transition: opacity 1s ease;
+  opacity: ${(p) => (p.videoDisplayed ? 1 : 0)};
 `;
 
 export default React.memo(VideoDisplay);
