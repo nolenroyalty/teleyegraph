@@ -234,9 +234,9 @@ const MaxWidthWrapper = styled.div`
   gap: 8px;
 
   grid-template-rows:
-    [header] 3em [video] minmax(16em, 2fr)
+    [header] 3em [video] min(20vh, 16em)
     [mainsignal] minmax(8em, 1fr)
-    [charsignal] 4em [word] 2em [text] 8em [button] minmax(10%, 1fr);
+    [charsignal] 4em [word] 2em [text] 8em [button] 100px;
 `;
 
 export default App;

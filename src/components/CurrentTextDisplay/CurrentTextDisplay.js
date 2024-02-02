@@ -12,13 +12,10 @@ function CurrentTextDisplay({ text, candidateWord }) {
   return (
     <Wrapper>
       {text}
-      LOREM IPSUM IS SOME HELPER TEXT MAN foo bar baz wahooo wahoo LOREM IPSUM
-      IS SOME HELPER TEXT MAN foo bar baz wahooo wahoo IS SOME HELPER TEXT MAN
-      foo bar baz wahooo wahoo
       <Candidate
         style={{ "--opacity": calculateOpacity(candidateWord.count) + 0.1 }}
       >
-        {candidateWord.word} CANDIDATE
+        {candidateWord.word}
       </Candidate>
     </Wrapper>
   );

@@ -69,9 +69,7 @@ const Button = styled.button`
 
 const VideoWrapper = styled.div`
   aspect-ratio: 3/2;
-  width: 67%;
   max-height: 100%;
-  /* margin: 0 auto; */
   background-color: ${(p) =>
     p.videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
   will-change: background-color;

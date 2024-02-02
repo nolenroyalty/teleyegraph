@@ -17,9 +17,6 @@ function CurrentSignalDisplay({ currentSignal }) {
     second = "dash-center";
     third = "dash-right";
   }
-  first = "dash-left";
-  second = "dash-center";
-  third = "dash-right";
 
   return (
     <Wrapper>
@@ -33,8 +30,6 @@ function CurrentSignalDisplay({ currentSignal }) {
 }
 
 const Wrapper = styled.div`
-  /* aspect-ratio: 3/1; */
-  /* max-height: 100%; */
   height: 100%;
   width: 100%;
   display: grid;
