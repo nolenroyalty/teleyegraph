@@ -8,7 +8,8 @@ import {
 
 function CurrentWordDisplay({ currentWord, candidateChar, fadeCount }) {
   const calculateCandidateOpacity = (count) => {
-    return Math.min(1, count / DITS_TO_ADD_CHARACTER);
+    const val = Math.min(1, count / DITS_TO_ADD_CHARACTER);
+    return val === 0 ? 0 : val + 0.1;
   };
 
   const calculateSelfOpacity = (count) => {
@@ -28,7 +29,7 @@ function CurrentWordDisplay({ currentWord, candidateChar, fadeCount }) {
       {currentWord}
       <Candidate
         style={{
-          "--opacity": calculateCandidateOpacity(candidateChar.count) + 0.1,
+          "--opacity": calculateCandidateOpacity(candidateChar.count),
         }}
       >
         {candidateChar.char}

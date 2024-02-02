@@ -216,7 +216,6 @@ const Title = styled.h1``;
 
 const Background = styled.div`
   min-height: 100%;
-  /* height: 100%; */
   width: 100%;
   background-image: linear-gradient(
     235deg,
@@ -234,9 +233,9 @@ const MaxWidthWrapper = styled.div`
   gap: 8px;
 
   grid-template-rows:
-    [header] 3em [video] min(20vh, 16em)
+    [header] 3em [video] min(25vh, 16em)
     [mainsignal] minmax(8em, 1fr)
-    [charsignal] 4em [word] 2em [text] 8em [button] 100px;
+    [charsignal] 4em [word] 2.5em [text] 7.5em [button] 100px;
 `;
 
 export default App;

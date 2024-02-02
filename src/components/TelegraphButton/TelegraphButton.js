@@ -7,15 +7,17 @@ function TelegraphButton({ setEyesClosed }) {
     <Button
       onMouseDown={(e) => setEyesClosed(true)}
       onMouseUp={(e) => setEyesClosed(false)}
+      onTouchStart={(e) => {
+        e.preventDefault();
+        setEyesClosed(true);
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        setEyesClosed(false);
+      }}
     />
   );
 }
-
-const Wrapper = styled.div`
-  display: grid;
-  place-content: center;
-`;
-
 const Button = styled.button`
   margin: 0 auto;
   background-color: ${COLORS["grey-30"]};

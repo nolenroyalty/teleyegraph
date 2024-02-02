@@ -3,17 +3,31 @@ import styled from "styled-components";
 import { DITS_TO_ADD_CHARACTER, DITS_TO_ADD_WORD } from "../../constants";
 
 function CurrentTextDisplay({ text, candidateWord }) {
+  const containerRef = React.useRef();
+  const candidateRef = React.useRef();
+
   const calculateOpacity = (count) => {
     const level = Math.max(0, count - DITS_TO_ADD_CHARACTER + 1);
     const max = DITS_TO_ADD_WORD - DITS_TO_ADD_CHARACTER;
-    return Math.min(1, level / max);
+    const val = Math.min(1, level / max);
+    return val === 0 ? 0 : val + 0.1;
   };
 
+  React.useEffect(() => {
+    if (candidateRef.current && containerRef.current) {
+      const { scrollHeight, clientHeight } = containerRef.current;
+      if (scrollHeight > clientHeight) {
+        candidateRef.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [text, candidateWord.word]);
+
   return (
-    <Wrapper>
+    <Wrapper ref={containerRef}>
       {text}
       <Candidate
-        style={{ "--opacity": calculateOpacity(candidateWord.count) + 0.1 }}
+        ref={candidateRef}
+        style={{ "--opacity": calculateOpacity(candidateWord.count) }}
       >
         {candidateWord.word}
       </Candidate>
