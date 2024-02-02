@@ -12,8 +12,6 @@ function CurrentCharacterDisplay({ currentChar, fadeCount }) {
     color = COLORS["grey-30"];
   }
 
-  currentChar = "..-.";
-
   const addSignal = (state) => {
     arr.push(<SignalDisplay key={arr.length} state={state} color={color} />);
   };

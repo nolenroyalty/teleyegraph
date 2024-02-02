@@ -66,9 +66,7 @@ function App() {
   const [currentWord, setCurrentWord] = React.useState("");
   const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
-  const [text, setText] = React.useState(
-    "aExample text Example text Example text Example text Example text Example text Example text Example text Exampfele text Example text Example text Example text "
-  );
+  const [text, setText] = React.useState("");
   const [eyesClosed, setEyesClosed] = React.useState(false);
 
   const signalCount = React.useRef({ on: 0, off: 0 });
@@ -215,19 +213,28 @@ const Header = styled.header`
 const Title = styled.h1``;
 
 const MaxWidthWrapper = styled.div`
-  max-width: 800px;
-  width: min(100vw, 800px);
+  --max-width: 800px;
+  --padding: 2rem;
+  --max-inner-width: calc(var(--max-width) - var(--padding) * 2);
+  max-width: var(--max-width);
+  width: min(100vw, var(--max-width));
   height: 100%;
-  padding: 2em 2em;
+  padding: var(--padding);
   margin: 0 auto;
   display: grid;
   gap: calc(8px + 1vh);
   align-content: space-between;
 
+  /*
+    take the max inner width, divide by the aspect ratio, and add 1 rem
+    for a little padding
+  */
+  --max-video-height: calc(var(--max-inner-width) * 9 / 16 + 1rem);
+
   grid-template-rows:
-    [header] 3em [video] minmax(150px, 500px)
+    [header] 3em [video] minmax(150px, var(--max-video-height))
     [mainsignal] minmax(75px, 200px)
-    [charsignal] 3em [word] 2.5em [text] 7.5em [button] 100px;
+    [charsignal] 3rem [word] 2.5em [text] 7.5em [button] 100px;
 
   grid-template-columns: min(100vw - 4em, 800px - 4em);
 `;

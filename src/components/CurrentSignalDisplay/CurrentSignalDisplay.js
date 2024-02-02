@@ -23,10 +23,6 @@ function CurrentSignalDisplay({ currentSignal }) {
   const height = ref.current?.offsetHeight || 0;
   const targetSize = Math.min(width / 3, height) + "px";
 
-  first = "dash-left";
-  second = "dash-center";
-  third = "dash-right";
-
   return (
     <Wrapper ref={ref} style={{ "--target-size": targetSize }}>
       <SignalDisplay state={first} />
