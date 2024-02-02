@@ -93,9 +93,10 @@ const Video = styled.video`
   max-height: 100%;
   margin: 0 auto;
   display: block;
+  background: green;
   will-change: opacity;
   transition: opacity 2s ease;
-  opacity: ${(p) => (p.videoDisplayed ? 1 : 0)};
+  opacity: ${(p) => (p.videoDisplayed ? 1 : 1)};
 `;
 
 export default React.memo(VideoDisplay);

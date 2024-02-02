@@ -3,6 +3,7 @@ import styled from "styled-components";
 import SignalDisplay from "../SignalDisplay";
 
 function CurrentSignalDisplay({ currentSignal }) {
+  const ref = React.useRef();
   let first = "none";
   let second = "none";
   let third = "none";
@@ -18,36 +19,29 @@ function CurrentSignalDisplay({ currentSignal }) {
     third = "dash-right";
   }
 
+  const width = ref.current?.offsetWidth || 0;
+  const height = ref.current?.offsetHeight || 0;
+  const targetSize = Math.min(width / 3, height) + "px";
+
+  first = "dash-left";
+  second = "dash-center";
+  third = "dash-right";
+
   return (
-    <Wrapper>
-      <DisplayGrid>
-        <SignalDisplay state={first} />
-        <SignalDisplay state={second} />
-        <SignalDisplay state={third} />
-      </DisplayGrid>
+    <Wrapper ref={ref} style={{ "--target-size": targetSize }}>
+      <SignalDisplay state={first} />
+      <SignalDisplay state={second} />
+      <SignalDisplay state={third} />
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  height: 100%;
-  width: 100%;
   display: grid;
-  place-content: center;
-`;
-
-const DisplayGrid = styled.div`
-  filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
-  background: none;
-
-  grid-template-columns: repeat(3, 1fr);
-  display: grid;
+  grid-template-columns: repeat(3, var(--target-size));
+  grid-template-rows: var(--target-size);
   justify-content: center;
-  align-items: center;
-
-  aspect-ratio: 3/1;
-  max-height: 100%;
-  width: min(400px, calc((100vw - 64px)));
+  filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
 `;
 
 export default CurrentSignalDisplay;
