@@ -1,3 +1,5 @@
+import React from "react";
+
 export function videoReady(video) {
   return (
     video.readyState >= 3 && !video.paused && (video.src || video.srcObject)
@@ -81,3 +83,40 @@ export function range(start, end, step = 1) {
 
   return range;
 }
+
+const usePrevious = (value, initialValue) => {
+  const ref = React.useRef(initialValue);
+  React.useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+};
+
+export const useEffectDebugger = (
+  effectHook,
+  dependencies,
+  dependencyNames = []
+) => {
+  const previousDeps = usePrevious(dependencies, []);
+
+  const changedDeps = dependencies.reduce((accum, dependency, index) => {
+    if (dependency !== previousDeps[index]) {
+      const keyName = dependencyNames[index] || index;
+      return {
+        ...accum,
+        [keyName]: {
+          before: previousDeps[index],
+          after: dependency,
+        },
+      };
+    }
+
+    return accum;
+  }, {});
+
+  if (Object.keys(changedDeps).length) {
+    console.log("[use-effect-debugger] ", changedDeps);
+  }
+
+  React.useEffect(effectHook, dependencies);
+};

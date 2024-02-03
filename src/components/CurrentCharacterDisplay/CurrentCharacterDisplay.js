@@ -22,7 +22,8 @@ function CurrentCharacterDisplay({ currentChar, fadeCount }) {
     } else if (c === "-") {
       ["dash-left", "dash-center", "dash-right"].forEach(addSignal);
     } else {
-      console.warn(`UNKNOWN CHAR ${c}`);
+      console.warn(`UNKNOWN CHAR`);
+      console.log({ c });
     }
   }
   while (arr.length < 15) {

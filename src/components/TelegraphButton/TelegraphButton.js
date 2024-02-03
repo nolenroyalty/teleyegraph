@@ -2,18 +2,18 @@ import React from "react";
 import styled from "styled-components";
 import { COLORS } from "../../constants";
 
-function TelegraphButton({ setEyesClosed }) {
+function TelegraphButton({ eyesClosed }) {
   return (
     <Button
-      onMouseDown={(e) => setEyesClosed(true)}
-      onMouseUp={(e) => setEyesClosed(false)}
+      onMouseDown={(e) => (eyesClosed.current = true)}
+      onMouseUp={(e) => (eyesClosed.current = false)}
       onTouchStart={(e) => {
         e.preventDefault();
-        setEyesClosed(true);
+        eyesClosed.current = true;
       }}
       onTouchEnd={(e) => {
         e.preventDefault();
-        setEyesClosed(false);
+        eyesClosed.current = false;
       }}
     />
   );

@@ -9,13 +9,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
 
   const frameCountIndex = React.useRef(0);
   const signalState = React.useRef({ open: 0, closed: 0 });
-  const [recentFrameCounts, setRecentFrameCounts] = React.useState([
-    TPS,
-    TPS,
-    TPS,
-    TPS,
-    TPS,
-  ]);
+  const recentFrameCounts = React.useRef([TPS, TPS, TPS, TPS, TPS]);
   const { sounds } = React.useContext(SoundContext);
 
   React.useEffect(() => {
@@ -26,17 +20,9 @@ function useProcessTick({ videoDisplayed, playSound }) {
 
       sounds.tick.play();
 
-      setRecentFrameCounts((counts) => {
-        const newCounts = [...counts];
-        newCounts[frameCountIndex.current] =
-          signalState.current.open + signalState.current.closed;
-        // Since this function runs asyncronously, we need to reset the
-        // signalState count here - if we reset it after then its value
-        // will be 0 here!
-        signalState.current = { open: 0, closed: 0 };
-        return newCounts;
-      });
-
+      recentFrameCounts.current[frameCountIndex.current] =
+        signalState.current.open + signalState.current.closed;
+      signalState.current = { open: 0, closed: 0 };
       frameCountIndex.current = (frameCountIndex.current + 1) % 5;
     }
 
@@ -45,11 +31,11 @@ function useProcessTick({ videoDisplayed, playSound }) {
   }, [signalState, videoDisplayed, sounds, playSound]);
 
   const estimateFps = React.useCallback(() => {
-    const averageFrames = recentFrameCounts.reduce(
+    const averageFrames = recentFrameCounts.current.reduce(
       (sum, count) => sum + count,
       0
     );
-    const averageFps = averageFrames / recentFrameCounts.length;
+    const averageFps = averageFrames / recentFrameCounts.current.length;
     return averageFps;
   }, [recentFrameCounts]);
 

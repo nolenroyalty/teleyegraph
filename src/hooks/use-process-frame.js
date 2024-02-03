@@ -1,6 +1,7 @@
 import React from "react";
 import { videoReady, isBlinking } from "../utils";
 import useLandmarker from "./use-landmarker";
+import { useEffectDebugger } from "../utils";
 
 function useProcessFrame({
   videoRef,
@@ -10,23 +11,18 @@ function useProcessFrame({
   eyesClosed,
 }) {
   const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
+  const requestRef = React.useRef();
   const landmarker = useLandmarker();
 
   React.useEffect(() => {
-    let reqId;
-
-    function handleFrame() {
-      reqId = window.requestAnimationFrame(handleFrame);
+    const f = (time) => {
+      requestRef.current = window.requestAnimationFrame(f);
       if (!landmarker || !videoReady(videoRef.current)) {
         return;
       }
 
-      const results = landmarker.detectForVideo(
-        videoRef.current,
-        performance.now()
-      );
-
-      if (eyesClosed || isBlinking(results)) {
+      const results = landmarker.detectForVideo(videoRef.current, time);
+      if (eyesClosed.current || isBlinking(results)) {
         signalState.current.closed += 1;
       } else {
         signalState.current.open += 1;
@@ -50,14 +46,22 @@ function useProcessFrame({
         // TBD: do we want to call the transition handler here?
         setDecisionThisTick("unknown");
       }
-    }
+    };
 
-    reqId = window.requestAnimationFrame(handleFrame);
+    requestRef.current = window.requestAnimationFrame(f);
 
     return () => {
-      window.cancelAnimationFrame(reqId);
+      console.log("canceling animation frame");
+      window.cancelAnimationFrame(requestRef.current);
     };
-  }, [signalState, landmarker, videoRef, estimateFps, callOnTickTransition]);
+  }, [
+    callOnTickTransition,
+    estimateFps,
+    eyesClosed,
+    landmarker,
+    signalState,
+    videoRef,
+  ]);
 
   return { decisionThisTick };
 }
