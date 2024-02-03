@@ -12,7 +12,7 @@ import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import CurrentWordDisplay from "../CurrentWordDisplay";
 import CurrentTextDisplay from "../CurrentTextDisplay";
 import TelegraphButton from "../TelegraphButton";
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 import {
   MAX_SIGNALS_IN_CHAR,
   DITS_TO_ADD_CHARACTER,

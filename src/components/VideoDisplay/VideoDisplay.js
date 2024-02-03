@@ -77,13 +77,12 @@ const VideoWrapper = styled.div`
   aspect-ratio: 16/9;
   margin: 0 auto;
   position: relative;
+  border-radius: 4.5% / 8%;
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-
-  /* position: relative; */
 `;
 
 const Video = styled.video`
@@ -91,8 +90,10 @@ const Video = styled.video`
   margin: 0 auto;
   display: block;
   will-change: opacity;
-  transition: opacity 1s ease;
+  transition: opacity 1.5s ease;
   opacity: ${(p) => (p.$videoDisplayed ? 1 : 0)};
+  border-radius: 16px;
+  filter: drop-shadow(2px 2px 8px black) sepia(0.75);
 `;
 
 export default React.memo(VideoDisplay);
