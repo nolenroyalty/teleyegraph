@@ -214,7 +214,8 @@ const Header = styled.header`
 
 const Title = styled.h1`
   font-family: "Jacques Francois Shadow", cursive;
-  font-size: 3rem;
+  font-size: 4rem;
+  line-height: 4.5rem;
   text-transform: uppercase;
   padding: 0;
   color: var(--color-grey-20);
@@ -244,7 +245,7 @@ const MaxWidthWrapper = styled.div`
   --max-video-height: calc(var(--max-inner-width) * 9 / 16 + 1rem);
 
   grid-template-rows:
-    [header] 4rem [video] minmax(150px, var(--max-video-height))
+    [header] 4.5rem [video] minmax(150px, var(--max-video-height))
     [mainsignal] minmax(75px, 200px)
     [charsignal] 3rem [word] 2.5em [text] 7.5em [button] 100px;
 
