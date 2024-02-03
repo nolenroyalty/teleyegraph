@@ -1,4 +1,5 @@
 import React from "react";
+import { SoundContext } from "../components/SoundProvider";
 
 function useProcessTick({ videoDisplayed, playSound }) {
   const TICK_TIME = 1000;
@@ -15,6 +16,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
     TPS,
     TPS,
   ]);
+  const { sounds } = React.useContext(SoundContext);
 
   React.useEffect(() => {
     function handleTick() {
@@ -22,7 +24,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
         return;
       }
 
-      playSound();
+      sounds.tick.play();
 
       setRecentFrameCounts((counts) => {
         const newCounts = [...counts];
@@ -40,7 +42,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
 
     const timerId = setInterval(handleTick, TICK_TIME);
     return () => clearInterval(timerId);
-  }, [signalState, videoDisplayed, playSound]);
+  }, [signalState, videoDisplayed, sounds, playSound]);
 
   const estimateFps = React.useCallback(() => {
     const averageFrames = recentFrameCounts.reduce(

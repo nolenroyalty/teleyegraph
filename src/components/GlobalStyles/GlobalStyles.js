@@ -1,19 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
-  @font-face {
-    font-family: "Jacques Francois Shadow";
-    src: url("/JacquesFrancoisShadow-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: "JMH Typewriter";
-    src: url("/JMH Typewriter.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-  }
 
 /*
   Stolen from Josh's Custom CSS Reset

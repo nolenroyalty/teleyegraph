@@ -1,17 +1,15 @@
 import React from "react";
 import styled from "styled-components";
 import { COLORS } from "../../constants";
+import { SoundContext } from "../SoundProvider";
 
-function VideoDisplay({
-  videoRef,
-  setVideoDisplayed,
-  videoDisplayed,
-  onButtonPress,
-}) {
+function VideoDisplay({ videoRef, setVideoDisplayed, videoDisplayed }) {
   console.log("VIDEO RENDER");
   const [buttonPressed, setButtonPressed] = React.useState(false);
+  const { resetAudioPaths } = React.useContext(SoundContext);
+
   const enableCam = React.useCallback(() => {
-    onButtonPress();
+    resetAudioPaths();
     setButtonPressed(true);
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -27,7 +25,7 @@ function VideoDisplay({
       .catch((err) => {
         console.log(`couldn't set up cam: ${err}`);
       });
-  }, [setVideoDisplayed, onButtonPress, videoRef]);
+  }, [resetAudioPaths, setVideoDisplayed, videoRef]);
 
   return (
     <Wrapper>
