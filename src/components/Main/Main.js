@@ -11,6 +11,7 @@ import TelegraphButton from "../TelegraphButton";
 // import useLandmarker from "../../hooks/use-landmarker";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
+import useStateRefCombo from "../../hooks/use-state-ref-combo";
 
 import { decodeMorse } from "../../utils";
 import {
@@ -31,35 +32,23 @@ function Main() {
 
   const { sounds } = React.useContext(SoundContext);
 
-  // This is gross but we have a bunch of state that we want to be able
-  // to update *and* read from our tick functions. We don't want *those*
-  // functions to re-render when we change this state (because it causes
-  // some thrasy behavior especially with request animation frame) - but
-  // we do want to have the rest of our app re-render based on the state.
-  // So we do this...
-  const wordRef = React.useRef("WORD");
-  const [currentWord, _setCurrentWord] = React.useState("WORD");
-  const setCurrentWord = React.useCallback((word) => {
-    wordRef.current = word;
-    _setCurrentWord(word);
-  }, []);
+  const {
+    state: currentWord,
+    ref: wordRef,
+    setState: setCurrentWord,
+  } = useStateRefCombo("WORD");
 
-  const charRef = React.useRef([]);
-  const [currentChar, _setCurrentChar] = React.useState([]);
-  const setCurrentChar = React.useCallback((char) => {
-    charRef.current = char;
-    _setCurrentChar(char);
-  }, []);
+  const {
+    state: currentChar,
+    ref: charRef,
+    setState: setCurrentChar,
+  } = useStateRefCombo([]);
 
-  const signalRef = React.useRef({ state: "none" });
-  const [currentSignal, _setCurrentSignal] = React.useState({ state: "none" });
-  const setCurrentSignal = React.useCallback(
-    (signal) => {
-      signalRef.current = signal;
-      _setCurrentSignal(signal);
-    },
-    [_setCurrentSignal]
-  );
+  const {
+    state: currentSignal,
+    ref: signalRef,
+    setState: setCurrentSignal,
+  } = useStateRefCombo({ state: "none" });
 
   const makeResetCandidate =
     (setCandidate) =>
@@ -119,7 +108,7 @@ function Main() {
       }
     }
     setCurrentSignal({ state: "none" });
-  }, [setCurrentChar, setCurrentSignal]);
+  }, [charRef, setCurrentChar, setCurrentSignal, signalRef]);
 
   const handleOnSignal = React.useCallback(() => {
     resetCandidateChar();
@@ -148,7 +137,14 @@ function Main() {
       // nroyalty: HANDLE ERROR
     }
     setCurrentChar([]);
-  }, [resetCandidateChar, setCurrentChar, setCurrentWord, sounds.addChar]);
+  }, [
+    charRef,
+    resetCandidateChar,
+    setCurrentChar,
+    setCurrentWord,
+    sounds.addChar,
+    wordRef,
+  ]);
 
   const callOnTickTransition = React.useCallback(
     (decision) => {
@@ -185,6 +181,7 @@ function Main() {
       HandleAddChar,
       setCurrentWord,
       resetCandidateWord,
+      wordRef,
       handleOnSignal,
     ]
   );
