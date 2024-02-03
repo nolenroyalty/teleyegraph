@@ -16,7 +16,6 @@ function App() {
 }
 
 const HeaderAux = React.memo(() => {
-  console.log("HEADER RENDER");
   return (
     <Header>
       <Title>

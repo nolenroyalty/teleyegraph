@@ -17,6 +17,7 @@ import {
   MAX_SIGNALS_IN_CHAR,
   DITS_TO_ADD_CHARACTER,
   DITS_TO_ADD_WORD,
+  DITS_IN_DASH,
 } from "../../constants";
 
 function Main() {
@@ -34,20 +35,32 @@ function Main() {
 
   const { sounds } = React.useContext(SoundContext);
 
-  const resetCandidateChar = (clearChar) => {
-    /* Gross hack - we want to preserve nice fade-ins / outs when we
-       reset the character due to closing our eyes (so we don't want to clear
-       the current char so that it fades out) - but when we *add* the character
-       we want to make sure to clear the candidate so that we don't have two
-       chars on screen while the candidate fades. Oh well. */
-    if (clearChar) {
-      setCandidateChar({ count: 0 });
-    } else {
-      setCandidateChar((c) => {
-        return { ...c, count: 0 };
-      });
-    }
-  };
+  const makeResetCandidate =
+    (setCandidate) =>
+    ({ hard = false } = {}) => {
+      /* Gross hack - we often want to preserve nice fade-ins / fade-outs
+        when resetting a character or word. This happens when, for example, we're
+        showing the character that we'd generate for the current signal and then
+        the user closes their eyes, which changes the current signal. If we wiped
+        the candidate immediately it wouldn't fade. Instead we just reset the count
+        so that it fades out.
+
+        We want to do a hard reset when we're adding a new character or word to the
+        page, because that character/word will take the place of the candidate.
+
+        Doing all of this means that we have to be more careful about managing
+        our candidate state to avoid showing stale values, but it's worth it. */
+      if (hard) {
+        setCandidate({ count: 0 });
+      } else {
+        setCandidate((c) => {
+          return { ...c, count: 0 };
+        });
+      }
+    };
+
+  const resetCandidateChar = makeResetCandidate(setCandidateChar);
+  const resetCandidateWord = makeResetCandidate(setCandidateWord);
 
   function callOnTickTransition(decision) {
     if (decision === "open") {
@@ -84,7 +97,7 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
           return { ...currentSignal, count: signalCount.current.off };
         });
       } else if (signalCount.current.off === DITS_TO_ADD_CHARACTER) {
-        resetCandidateChar(true);
+        resetCandidateChar({ hard: true });
         const decoded = decodeMorse(currentChar.join(""));
         if (decoded !== null) {
           sounds.addChar.play();
@@ -110,20 +123,17 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
       } else if (signalCount.current.off === DITS_TO_ADD_WORD) {
         setText((currentText) => `${currentText} ${currentWord}`);
         setCurrentWord("");
-        setCandidateWord({ count: 0 });
+        resetCandidateWord({ hard: true });
       }
     } else if (decision === "closed") {
       resetCandidateChar();
-      setCandidateWord((current) => {
-        // same fading hack as above
-        return { ...current, count: 0 };
-      });
+      resetCandidateWord();
       signalCount.current.off = 0;
       signalCount.current.on += 1;
 
-      if (signalCount.current.on === 3) {
+      if (signalCount.current.on === DITS_IN_DASH) {
         setCurrentSignal({ state: "-" });
-      } else if (signalCount.current.on < 3) {
+      } else if (signalCount.current.on < DITS_IN_DASH) {
         setCurrentSignal({ state: ".", count: signalCount.current.on });
       }
     }

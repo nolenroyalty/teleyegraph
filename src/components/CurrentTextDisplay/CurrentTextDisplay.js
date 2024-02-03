@@ -13,15 +13,6 @@ function CurrentTextDisplay({ text, candidateWord }) {
     return val === 0 ? 0 : val + 0.1;
   };
 
-  // React.useEffect(() => {
-  //   if (candidateRef.current && containerRef.current) {
-  //     const { scrollHeight, clientHeight } = containerRef.current;
-  //     if (scrollHeight > clientHeight) {
-  //       candidateRef.current.scrollIntoView({ behavior: "smooth" });
-  //     }
-  //   }
-  // }, [text, candidateWord.word]);
-
   React.useEffect(() => {
     if (containerRef.current) {
       const { scrollHeight, clientHeight } = containerRef.current;
@@ -75,4 +66,4 @@ const Wrapper = styled.p`
   overflow: auto;
 `;
 
-export default CurrentTextDisplay;
+export default React.memo(CurrentTextDisplay);

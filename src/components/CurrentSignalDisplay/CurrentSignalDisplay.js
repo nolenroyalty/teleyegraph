@@ -42,4 +42,4 @@ const Wrapper = styled.div`
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
 `;
 
-export default CurrentSignalDisplay;
+export default React.memo(CurrentSignalDisplay);

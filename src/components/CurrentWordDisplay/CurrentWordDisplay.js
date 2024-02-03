@@ -63,4 +63,4 @@ const Wrapper = styled.p`
   /* min-height: 2em; */
 `;
 
-export default CurrentWordDisplay;
+export default React.memo(CurrentWordDisplay);
