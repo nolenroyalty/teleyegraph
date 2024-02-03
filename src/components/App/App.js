@@ -12,7 +12,7 @@ import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import CurrentWordDisplay from "../CurrentWordDisplay";
 import CurrentTextDisplay from "../CurrentTextDisplay";
 import TelegraphButton from "../TelegraphButton";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import {
   MAX_SIGNALS_IN_CHAR,
   DITS_TO_ADD_CHARACTER,
@@ -209,12 +209,10 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
 
 const Header = styled.header`
   text-align: center;
-  /* font-style: italic; */
 `;
 
 const Title = styled.h1`
   font-family: "Jacques Francois Shadow", cursive;
-  // nroyalty: MAKE THIS SCALE!
   font-size: clamp(2.2rem, 5vw + 1rem, 4.2rem);
   line-height: 4.5rem;
   text-transform: uppercase;
@@ -240,8 +238,6 @@ const MaxWidthWrapper = styled.div`
   display: grid;
   gap: calc(8px + 1vh);
   align-content: space-between;
-
-  font-family: "JMH Typewriter", monospace;
 
   /*
     take the max inner width, divide by the aspect ratio, and add 1 rem

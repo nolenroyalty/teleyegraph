@@ -1,3 +1,20 @@
+import { createGlobalStyle } from "styled-components";
+
+const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: "Jacques Francois Shadow";
+    src: url("/JacquesFrancoisShadow-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "JMH Typewriter";
+    src: url("/JMH Typewriter.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
 /*
   Stolen from Josh's Custom CSS Reset
   https://www.joshwcomeau.com/css/custom-css-reset/
@@ -34,10 +51,14 @@ body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  font-family: "Lato", sans-serif;
+  font-family: "JMH Typewriter", sans-serif;
   font-weight: 400;
 
-  /* background-image: url("/noise.png"); */
+  background: url("/noise.svg"), linear-gradient(235deg,
+    var(--color-tan-400),
+    var(--color-tan-300),
+    var(--color-tan-200),
+    var(--color-tan-300));
 }
 img,
 picture,
@@ -67,3 +88,6 @@ h6 {
   height: 100%;
   isolation: isolate;
 }
+`;
+
+export default GlobalStyles;
