@@ -214,11 +214,14 @@ const Header = styled.header`
 
 const Title = styled.h1`
   font-family: "Jacques Francois Shadow", cursive;
-  font-size: 4rem;
+  // nroyalty: MAKE THIS SCALE!
+  font-size: clamp(2.2rem, 5vw + 1rem, 4.2rem);
   line-height: 4.5rem;
   text-transform: uppercase;
   padding: 0;
   color: var(--color-grey-20);
+  // never wrap
+  white-space: nowrap;
 `;
 
 const ShadowSpan = styled.span`
