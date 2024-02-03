@@ -59,7 +59,10 @@ const Button = styled.button`
   place-content: center;
 
   color: ${COLORS["white"]};
+
+  // nroyalty: REMOVE, MOVE TO STYLES
   background: ${COLORS["primary"]};
+  background: #160b0578;
 
   will-change: opacity;
   pointer-events: ${(p) => (p.disabled ? "none" : "auto")};

@@ -13,6 +13,13 @@ const GlobalStyle = createGlobalStyle`
     font-style: normal;
   }
 
+  @font-face {
+    font-family: "JMH Typewriter";
+    src: url("/JMH Typewriter.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
   body {
     background: url("/noise.svg"), linear-gradient(235deg,
     var(--color-tan-400),

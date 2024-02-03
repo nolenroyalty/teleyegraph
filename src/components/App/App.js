@@ -63,10 +63,10 @@ function App() {
   const landmarker = useLandmarker();
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
   const [currentChar, setCurrentChar] = React.useState([]);
-  const [currentWord, setCurrentWord] = React.useState("");
+  const [currentWord, setCurrentWord] = React.useState("WORD");
   const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
-  const [text, setText] = React.useState("");
+  const [text, setText] = React.useState("CURRENT TEXT");
   const [eyesClosed, setEyesClosed] = React.useState(false);
 
   const signalCount = React.useRef({ on: 0, off: 0 });
@@ -240,6 +240,8 @@ const MaxWidthWrapper = styled.div`
   display: grid;
   gap: calc(8px + 1vh);
   align-content: space-between;
+
+  font-family: "JMH Typewriter", monospace;
 
   /*
     take the max inner width, divide by the aspect ratio, and add 1 rem
