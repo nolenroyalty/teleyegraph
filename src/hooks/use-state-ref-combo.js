@@ -1,5 +1,10 @@
 import React from "react";
 
+/* Maybe in the future this should provide a single object
+with a nice API so you don't have to be as careful. But idk how
+that works given that we want to be able to change its state.
+ugh. */
+
 function useStateRefCombo(initialValue) {
   // This is gross but we have a bunch of state that we want to be able
   // to update *and* read from our tick functions. We don't want *those*
