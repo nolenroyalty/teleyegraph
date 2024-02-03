@@ -181,7 +181,9 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   return (
     <MaxWidthWrapper>
       <Header>
-        <Title>tel👁️graph</Title>
+        <Title>
+          Tel<ShadowSpan>👁️</ShadowSpan>graph
+        </Title>
       </Header>
       <VideoDisplay
         videoRef={videoRef}
@@ -207,10 +209,20 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
 
 const Header = styled.header`
   text-align: center;
-  font-style: italic;
+  /* font-style: italic; */
 `;
 
-const Title = styled.h1``;
+const Title = styled.h1`
+  font-family: "Jacques Francois Shadow", cursive;
+  font-size: 3rem;
+  text-transform: uppercase;
+  padding: 0;
+  color: var(--color-grey-20);
+`;
+
+const ShadowSpan = styled.span`
+  filter: drop-shadow(4px 4px 4px hsl(0deg 0% 0% / 0.75));
+`;
 
 const MaxWidthWrapper = styled.div`
   --max-width: 800px;
@@ -232,7 +244,7 @@ const MaxWidthWrapper = styled.div`
   --max-video-height: calc(var(--max-inner-width) * 9 / 16 + 1rem);
 
   grid-template-rows:
-    [header] 3em [video] minmax(150px, var(--max-video-height))
+    [header] 4rem [video] minmax(150px, var(--max-video-height))
     [mainsignal] minmax(75px, 200px)
     [charsignal] 3rem [word] 2.5em [text] 7.5em [button] 100px;
 
