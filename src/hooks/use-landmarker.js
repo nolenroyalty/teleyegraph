@@ -5,6 +5,7 @@ function useLandmarker() {
   const [landmarker, setLandmarker] = React.useState(null);
 
   React.useEffect(() => {
+    console.log("useLandmarker");
     async function getFilesetResolver() {
       const filesetResolver = await FilesetResolver.forVisionTasks(
         "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.3/wasm"

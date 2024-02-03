@@ -8,7 +8,7 @@ import CurrentWordDisplay from "../CurrentWordDisplay";
 import CurrentTextDisplay from "../CurrentTextDisplay";
 import TelegraphButton from "../TelegraphButton";
 
-import useLandmarker from "../../hooks/use-landmarker";
+// import useLandmarker from "../../hooks/use-landmarker";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
 
@@ -23,7 +23,6 @@ import {
 function Main() {
   const videoRef = React.useRef();
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
-  const landmarker = useLandmarker(); // move
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
   const [currentChar, setCurrentChar] = React.useState([]);
   const [currentWord, setCurrentWord] = React.useState("WORD");
@@ -144,7 +143,6 @@ already has ${MAX_SIGNALS_IN_CHAR} signals`
   });
 
   const { decisionThisTick } = useProcessFrame({
-    landmarker,
     videoRef,
     signalState,
     estimateFps,

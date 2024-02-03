@@ -1,8 +1,8 @@
 import React from "react";
 import { videoReady, isBlinking } from "../utils";
+import useLandmarker from "./use-landmarker";
 
 function useProcessFrame({
-  landmarker,
   videoRef,
   signalState,
   estimateFps,
@@ -10,6 +10,7 @@ function useProcessFrame({
   eyesClosed,
 }) {
   const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
+  const landmarker = useLandmarker();
 
   React.useEffect(() => {
     let reqId;
