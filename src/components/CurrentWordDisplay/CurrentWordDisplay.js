@@ -59,7 +59,8 @@ const Wrapper = styled.p`
   transition:
     color 200ms ease,
     opacity 200ms ease;
-  font-size: 2em;
+  font-size: 1.5em;
+  min-height: calc(1.5 * 1.5em);
   /* min-height: 2em; */
 `;
 

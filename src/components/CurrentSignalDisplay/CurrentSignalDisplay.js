@@ -40,6 +40,9 @@ const Wrapper = styled.div`
   justify-content: center;
   align-content: center;
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
+  height: 0px;
+
+  flex: 1 1 75px;
 `;
 
 export default React.memo(CurrentSignalDisplay);

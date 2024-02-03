@@ -70,7 +70,7 @@ const Button = styled.button`
 
 const VideoWrapper = styled.div`
   max-height: 100%;
-  max-width: 100%;
+  /* max-width: 100%; */
   background-color: ${(p) =>
     p.$videoDisplayed ? "transparent" : "hsl(0deg 0% 0% / 0.1)"};
   will-change: background-color;
@@ -82,8 +82,8 @@ const VideoWrapper = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
+  height: 0px;
+  flex: 2 2 225px;
 `;
 
 const Video = styled.video`

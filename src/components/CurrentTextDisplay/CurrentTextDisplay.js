@@ -50,7 +50,9 @@ const Candidate = styled.span`
 `;
 
 const Wrapper = styled.p`
-  font-size: 1.5em;
+  /* font-size: 1.5em;
+   */
+  font-size: 1em;
   padding: 10px 8px;
   scroll-behavior: smooth;
 
@@ -64,6 +66,7 @@ const Wrapper = styled.p`
   */
   padding: 10px calc((100% / 15) * 0.75 * 0.5 * 0.5 - 1px);
   overflow: auto;
+  flex: 0 0 7.5em;
 `;
 
 export default React.memo(CurrentTextDisplay);
