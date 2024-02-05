@@ -32,7 +32,7 @@ function VideoDisplay({ videoRef, setVideoDisplayed, videoDisplayed }) {
       <VideoWrapper $videoDisplayed={videoDisplayed}>
         <Video $videoDisplayed={videoDisplayed} ref={videoRef} autoPlay muted />
         <Button disabled={buttonPressed} onClick={enableCam}>
-          Enable Video
+          <p>Enable Video</p>
         </Button>
       </VideoWrapper>
     </Wrapper>
@@ -52,9 +52,7 @@ const Button = styled.button`
   box-shadow: 2px 2px 8px 2px hsl(0deg 0% 0% / 0.3);
   border-radius: 10px;
   position: absolute;
-  font-size: 1.5em;
-  display: grid;
-  place-content: center;
+  font-size: 1.25em;
 
   color: ${COLORS["white"]};
 
