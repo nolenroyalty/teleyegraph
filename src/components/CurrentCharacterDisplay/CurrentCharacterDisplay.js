@@ -38,7 +38,11 @@ const Wrapper = styled.div`
   align-items: center;
   filter: drop-shadow(4px 5px 5px hsl(0deg 0% 0% / 0.35));
   grid-template-columns: repeat(15, 1fr);
+  gap: 2px;
   width: 100%;
+
+  flex: 1 1 75px;
+  min-height: 50px;
 `;
 
 export default React.memo(CurrentCharacterDisplay);
