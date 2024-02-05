@@ -8,7 +8,8 @@ function useProcessFrame({
   signalState,
   estimateFps,
   callOnTickTransition,
-  eyesClosed,
+  eyesClosedRef,
+  setEyesClosed,
 }) {
   const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
   const requestRef = React.useRef();
@@ -22,9 +23,13 @@ function useProcessFrame({
       }
 
       const results = landmarker.detectForVideo(videoRef.current, time);
-      if (eyesClosed.current || isBlinking(results)) {
+      if (isBlinking(results)) {
+        setEyesClosed(true);
+        signalState.current.closed += 1;
+      } else if (eyesClosedRef.current.fromButton) {
         signalState.current.closed += 1;
       } else {
+        setEyesClosed(false);
         signalState.current.open += 1;
       }
 
@@ -57,7 +62,7 @@ function useProcessFrame({
   }, [
     callOnTickTransition,
     estimateFps,
-    eyesClosed,
+    eyesClosedRef,
     landmarker,
     signalState,
     videoRef,

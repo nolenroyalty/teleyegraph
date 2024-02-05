@@ -38,10 +38,11 @@ body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
   font-family: "JMH Typewriter", sans-serif;
   font-weight: 400;
 
-  background: 
+  background-image: 
     url("/noise.svg"),
     radial-gradient(circle at 100% 5%, 
     var(--color-tan-400) 5%, 
@@ -49,7 +50,7 @@ body {
     var(--color-tan-300) 70%,
     var(--color-tan-500) 100%
     );
-    
+
 }
 img,
 picture,

@@ -33,10 +33,16 @@ function Main() {
   const [text, setText] = React.useState(
     "TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT "
   );
-  const eyesClosed = React.useRef(false);
+
   const signalCount = React.useRef({ on: 0, off: 0 });
 
   const { sounds } = React.useContext(SoundContext);
+
+  const {
+    state: eyesClosed,
+    ref: eyesClosedRef,
+    setState: setEyesClosed,
+  } = useStateRefCombo({ fromVideo: false, fromButton: false });
 
   const {
     state: currentWord,
@@ -196,12 +202,27 @@ function Main() {
     videoDisplayed,
   });
 
+  const setButtonEyesClosed = React.useCallback(
+    (val) => {
+      setEyesClosed((prev) => ({ ...prev, fromButton: val }));
+    },
+    [setEyesClosed]
+  );
+
+  const setVideoEyesClosed = React.useCallback(
+    (val) => {
+      setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
+    },
+    [setEyesClosed]
+  );
+
   const { decisionThisTick } = useProcessFrame({
     videoRef,
     signalState,
     estimateFps,
     callOnTickTransition,
-    eyesClosed,
+    eyesClosedRef,
+    setEyesClosed: setVideoEyesClosed,
   });
 
   return (
@@ -222,7 +243,10 @@ function Main() {
         fadeCount={candidateWord.count}
       />
       <CurrentTextDisplay text={text} candidateWord={candidateWord} />
-      <TelegraphButton eyesClosed={eyesClosed} />
+      <TelegraphButton
+        eyesClosed={eyesClosed}
+        setEyesClosed={setButtonEyesClosed}
+      />
     </Wrapper>
   );
 }

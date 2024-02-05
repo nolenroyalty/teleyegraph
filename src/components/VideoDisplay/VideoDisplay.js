@@ -52,7 +52,10 @@ const Button = styled.button`
   box-shadow: 2px 2px 8px 2px hsl(0deg 0% 0% / 0.3);
   border-radius: 10px;
   position: absolute;
-  font-size: 1.25em;
+  font-size: 1.5em;
+  @media (max-width: 800px) {
+    font-size: 1.25em;
+  }
 
   color: ${COLORS["white"]};
   background: #160b0578;
