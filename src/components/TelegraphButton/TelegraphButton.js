@@ -47,8 +47,7 @@ const Front = styled.span`
   --c-2: #454545;
   --c-3: #262626;
 
-  background-image: url("/buttonnoise.svg"),
-    conic-gradient(
+  background-image: conic-gradient(
       hsl(0deg 0% 90% / 0.2),
       hsl(0deg 0% 90% / 0.3),
       hsl(0deg 0% 90% / 0),
@@ -62,8 +61,7 @@ const Front = styled.span`
       hsl(0deg 0% 90% / 0.15)
     ),
     radial-gradient(circle at 50% 50%, var(--c-1) 0%, var(--c-2), var(--c-3));
-
-  filter: brightness(90%) contrast(90%);
+  filter: brightness(90%) blur(1px);
 
   transform: ${(p) => (p.$pressed ? "translate(3px, 4px)" : undefined)};
   position: absolute;

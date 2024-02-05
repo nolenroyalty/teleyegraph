@@ -1,21 +1,20 @@
-<!-- svg: first layer -->
 <svg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'>
-  <filter id='noiseFilter'>
-    <feTurbulence 
-      type='fractalNoise' 
-      baseFrequency='0.025'
-      numOctaves='2' 
-      stitchTiles='stitch'/>
-    <feColorMatrix values="1 0 0 0 0
-                           1 0 0 0 0
-                           1 0 0 0 0
-                           0 0 0 0 1"/>
-    <feComponentTransfer>
-        <feFuncR type="table" tableValues="0.1 0.15 0.23 0.4 0.31"/>
-        <feFuncG type="table" tableValues="0.1 0.15 0.23 0.4 0.32"/>
-        <feFuncB type="table" tableValues="0.1 0.15 0.23 0.4 0.07"/>
-    </feComponentTransfer>                           
-  </filter>
-  
-  <rect width='100%' height='100%' filter='url(#noiseFilter)'/>
+    <filter id="noiseFilter">
+        <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.025"
+            numOcatves="2"
+            stitchTiles="stich" />
+        <feColorMatrix values="1 0 0 0 0
+                1 0 0 0 0
+                1 0 0 0 0
+                0 0 0 0 1" />
+        <feComponentTransfer>
+            <feFuncR type="table" tableValues="0.01 0.01 0.01 0.01 0.25 0.37" />
+            <feFuncG type="table" tableValues="0.01 0.01 0.01 0.01 0.17 0.21" />
+            <feFuncB type="table" tableValues="0.0 0.01 0.01 0.01 0.05 0.02" />
+        </feComponentTransfer>
+    </filter>
+
+    <rect width="100%" height="100%" filter="url(#noiseFilter)" />
 </svg>
