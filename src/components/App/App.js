@@ -103,7 +103,7 @@ const MaxWidthWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 8px;
+  gap: 16px;
   /*
     take the max inner width, divide by the aspect ratio, and add 1 rem
     for a little padding
