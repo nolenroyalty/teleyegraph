@@ -232,6 +232,7 @@ const Wrapper = styled.main`
   flex-direction: column;
   justify-content: space-around;
   height: 100%;
+  gap: 1rem;
 `;
 
 export default Main;
