@@ -63,7 +63,7 @@ const Title = styled.h1`
 
 const ShadowSpan = styled.span`
   filter: drop-shadow(4px 4px 4px hsl(0deg 0% 0% / 0.75));
-  margin: 0 0 0 -4px;
+  margin: 0 2px 0 -4px;
 `;
 
 const SubHead = styled.div`

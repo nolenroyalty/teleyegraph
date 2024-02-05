@@ -51,6 +51,9 @@ const Candidate = styled.span`
 
 const Wrapper = styled.p`
   --font-size: 1.25rem;
+  @media (max-width: 600px) {
+    --font-size: 1rem;
+  }
   font-size: var(--font-size);
   scroll-behavior: smooth;
 

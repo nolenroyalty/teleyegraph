@@ -52,6 +52,9 @@ const Wrapper = styled.p`
     color 200ms ease,
     opacity 200ms ease;
   --font-size: 1.5rem;
+  @media (max-width: 600px) {
+    --font-size: 1.25rem;
+  }
   font-size: var(--font-size);
   min-height: calc(1.5 * var(--font-size));
 `;
