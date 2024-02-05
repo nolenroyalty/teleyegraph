@@ -70,7 +70,7 @@ const SubHead = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  padding: 4px 4px 0 4px;
+  padding: 4px 0px 0 2px;
 `;
 
 const SubHeadItem = styled.h2`
