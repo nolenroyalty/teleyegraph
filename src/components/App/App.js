@@ -28,6 +28,7 @@ const HeaderAux = React.memo(() => {
 const Header = styled.header`
   text-align: center;
   flex: 0 0 auto;
+  letter-spacing: 4px;
 `;
 
 const Title = styled.h1`
@@ -45,6 +46,7 @@ const Title = styled.h1`
 
 const ShadowSpan = styled.span`
   filter: drop-shadow(4px 4px 4px hsl(0deg 0% 0% / 0.75));
+  margin: 0 -6px;
 `;
 
 const MaxWidthWrapper = styled.div`
