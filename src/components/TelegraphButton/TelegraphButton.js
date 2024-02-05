@@ -23,9 +23,9 @@ const Button = styled.button`
   background-color: ${COLORS["grey-30"]};
   border: none;
   border-radius: 50%;
-  min-height: 100px;
-  width: 100px;
-  flex-basis: 0 0 100px;
+  aspect-ratio: 1/1;
+  flex: 0 1 75px;
+  min-height: 50px;
   color: ${COLORS["white"]};
 `;
 
