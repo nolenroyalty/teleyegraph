@@ -83,6 +83,12 @@ const VideoWrapper = styled.div`
 const Wrapper = styled.div`
   height: 0px;
   flex: 2 2 225px;
+
+  @media (max-width: 800px) {
+    --width: calc(100vw - 64px);
+    --max-video-height: calc(var(--width) * 9 / 16);
+  }
+
   max-height: var(--max-video-height);
 `;
 

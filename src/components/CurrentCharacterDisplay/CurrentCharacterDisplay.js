@@ -40,9 +40,7 @@ const Wrapper = styled.div`
   grid-template-columns: repeat(15, 1fr);
   gap: 2px;
   width: 100%;
-
-  flex: 1 1 75px;
-  min-height: 50px;
+  min-height: 25px;
 `;
 
 export default React.memo(CurrentCharacterDisplay);

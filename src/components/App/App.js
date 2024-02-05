@@ -60,22 +60,11 @@ const MaxWidthWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 8px;
-  /* align-content: start; */
-  /* gap: calc(8px + 1vh); */
-  /* align-content: space-between; */
-
   /*
     take the max inner width, divide by the aspect ratio, and add 1 rem
     for a little padding
   */
   --max-video-height: calc(var(--max-inner-width) * 9 / 16 + 1rem);
-  /* 
-  grid-template-rows:
-    [header] 4.5rem [video] minmax(150px, var(--max-video-height))
-    [mainsignal] minmax(75px, 200px)
-    [charsignal] 3rem [word] 2.5em [text] 7.5em [button] 100px;
-
-  grid-template-columns: min(100vw - 4em, 800px - 4em); */
 `;
 
 export default App;

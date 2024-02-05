@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { SoundContext } from "../SoundProvider";
 
 import VideoDisplay from "../VideoDisplay";
@@ -204,7 +205,7 @@ function Main() {
   });
 
   return (
-    <>
+    <Wrapper>
       <VideoDisplay
         videoRef={videoRef}
         videoDisplayed={videoDisplayed}
@@ -222,8 +223,15 @@ function Main() {
       />
       <CurrentTextDisplay text={text} candidateWord={candidateWord} />
       <TelegraphButton eyesClosed={eyesClosed} />
-    </>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.main`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+`;
 
 export default Main;

@@ -19,6 +19,9 @@ function CurrentSignalDisplay({ currentSignal }) {
     third = "dash-right";
   }
 
+  first = "dot";
+  second = "dot";
+
   const width = ref.current?.offsetWidth || 0;
   const height = ref.current?.offsetHeight || 0;
   const targetSize = Math.min(width / 3, height) + "px";
@@ -34,6 +37,7 @@ function CurrentSignalDisplay({ currentSignal }) {
 
 const Wrapper = styled.div`
   --padding: max(1vh, 1vw);
+
   display: grid;
   grid-template-columns: repeat(3, calc(var(--target-size) - var(--padding)));
   grid-template-rows: calc(var(--target-size) - var(--padding));
@@ -42,8 +46,9 @@ const Wrapper = styled.div`
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
   height: 0px;
 
-  flex: 2 2 100px;
-  min-height: 75px;
+  flex: 1 1 75px;
+  max-height: min(calc(0.13 * 100vh), 150px);
+  min-height: 50px;
 `;
 
 export default React.memo(CurrentSignalDisplay);
