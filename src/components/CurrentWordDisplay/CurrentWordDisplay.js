@@ -45,23 +45,15 @@ const Candidate = styled.span`
 `;
 
 const Wrapper = styled.p`
-  /*
-    100% - width of above grid
-    15 - cells in grid
-    .75 - scale of a circle
-    .5 - divide by two to get radius
-    .5 - divide by two because of padding on each side
-    2px - optical alignment.
-  */
-  padding: 0 calc((100% / 15) * 0.75 * 0.5 * 0.5 - 2px);
+  padding: 0 2px;
   opacity: var(--opacity);
   will-change: color, opacity;
   transition:
     color 200ms ease,
     opacity 200ms ease;
-  font-size: 1.5em;
-  min-height: calc(1.5 * 1.5em);
-  /* min-height: 2em; */
+  --font-size: 1.5rem;
+  font-size: var(--font-size);
+  min-height: calc(1.5 * var(--font-size));
 `;
 
 export default React.memo(CurrentWordDisplay);
