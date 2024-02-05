@@ -24,9 +24,14 @@ import {
 function Main() {
   const videoRef = React.useRef();
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
-  const [candidateChar, setCandidateChar] = React.useState({ count: 0 });
+  const [candidateChar, setCandidateChar] = React.useState({
+    char: "A",
+    count: 0,
+  });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
-  const [text, setText] = React.useState("CURRENT TEXT");
+  const [text, setText] = React.useState(
+    "TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT "
+  );
   const eyesClosed = React.useRef(false);
   const signalCount = React.useRef({ on: 0, off: 0 });
 
@@ -42,13 +47,13 @@ function Main() {
     state: currentChar,
     ref: charRef,
     setState: setCurrentChar,
-  } = useStateRefCombo([]);
+  } = useStateRefCombo([".", "-", "-", "-"]);
 
   const {
     state: currentSignal,
     ref: signalRef,
     setState: setCurrentSignal,
-  } = useStateRefCombo({ state: "none" });
+  } = useStateRefCombo({ state: ".", count: 2 });
 
   const makeResetCandidate =
     (setCandidate) =>
