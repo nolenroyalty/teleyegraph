@@ -55,9 +55,6 @@ const Button = styled.button`
   font-size: 1.25em;
 
   color: ${COLORS["white"]};
-
-  // nroyalty: REMOVE, MOVE TO STYLES
-  background: ${COLORS["primary"]};
   background: #160b0578;
 
   will-change: opacity;
