@@ -33,7 +33,7 @@ function CurrentSignalDisplay({ currentSignal }) {
 }
 
 const Wrapper = styled.div`
-  --padding: max(2vh, 2vw);
+  --padding: max(1vh, 1vw);
   display: grid;
   grid-template-columns: repeat(3, calc(var(--target-size) - var(--padding)));
   grid-template-rows: calc(var(--target-size) - var(--padding));
@@ -42,7 +42,8 @@ const Wrapper = styled.div`
   filter: drop-shadow(6px 5px 5px hsl(0deg 0% 0% / 0.3));
   height: 0px;
 
-  flex: 1 1 75px;
+  flex: 2 2 100px;
+  min-height: 75px;
 `;
 
 export default React.memo(CurrentSignalDisplay);
