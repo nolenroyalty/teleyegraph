@@ -66,13 +66,19 @@ const SubHead = styled.div`
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
-  padding: 4px 4px 0 2px;
+  padding: 4px 4px 0 4px;
 `;
 
 const SubHeadItem = styled.h2`
   letter-spacing: 4px;
   white-space: nowrap;
-  font-size: clamp(0.5rem, calc(0.5rem + 1vw), 1.125rem);
+  font-size: 1rem;
+
+  @media (max-width: 600px) {
+    font-size: 0.875rem;
+    letter-spacing: 2px;
+  }
+
   font-family: "JMH Typewriter", sans-serif;
 `;
 
