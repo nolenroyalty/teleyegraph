@@ -19,7 +19,7 @@ const HeaderAux = React.memo(() => {
   return (
     <Header>
       <Title>
-        Tel<ShadowSpan>👁️</ShadowSpan>graph
+        Tel<ShadowSpan>👁️</ShadowSpan>grap<NoSpacing>h</NoSpacing>
         <SubHead>
           <SubHeadItem>Office of Origin:</SubHeadItem>
           <SubHeadItem>
@@ -44,7 +44,7 @@ const Header = styled.header`
 const Title = styled.h1`
   display: inline-block;
   text-align: center;
-  letter-spacing: 4px;
+  letter-spacing: 16px;
   font-family: "Jacques Francois Shadow", cursive;
   --font-size: clamp(2.2rem, min(5vw, 5vh) + 1rem, 4.2rem);
   font-size: var(--font-size);
@@ -55,6 +55,10 @@ const Title = styled.h1`
   // never wrap
   white-space: nowrap;
   width: min-content;
+
+  @media (max-width: 800px) {
+    letter-spacing: 8px;
+  }
 `;
 
 const ShadowSpan = styled.span`
