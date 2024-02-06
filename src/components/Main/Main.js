@@ -13,6 +13,7 @@ import MorseBeepManager from "../MorseBeepManager";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
 import useStateRefCombo from "../../hooks/use-state-ref-combo";
+import useResettableCandidate from "../../hooks/use-resettable-candidate";
 
 import { decodeMorse } from "../../utils";
 import {
@@ -27,11 +28,11 @@ function Main() {
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
   const [currentChar, setCurrentChar] = React.useState([]);
-  const [candidateChar, setCandidateChar] = React.useState({
-    count: 0,
-  });
+  const [candidateChar, setCandidateChar, resetCandidateChar] =
+    useResettableCandidate();
   const [currentWord, setCurrentWord] = React.useState("");
-  const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
+  const [candidateWord, setCandidateWord, resetCandidateWord] =
+    useResettableCandidate();
   const [text, setText] = React.useState("");
   const [signalCounts, setSignalCounts] = React.useState({
     consumed: true,
@@ -53,49 +54,19 @@ function Main() {
     videoDisplayed,
   });
 
-  const setButtonEyesClosed = React.useCallback(
-    (val) => {
-      setEyesClosed((prev) => ({ ...prev, fromButton: val }));
-    },
-    [setEyesClosed]
-  );
-
-  const setVideoEyesClosed = React.useCallback(
-    (val) => {
-      setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
-    },
-    [setEyesClosed]
-  );
-
   useProcessFrame({
     videoRef,
     signalState,
     estimateFps,
     eyesClosedRef,
-    setEyesClosed: setVideoEyesClosed,
+    setEyesClosed: React.useCallback(
+      (val) => {
+        setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
+      },
+      [setEyesClosed]
+    ),
     setSignalCounts,
   });
-
-  const makeResetCandidate =
-    (setCandidate) =>
-    ({ hard = false } = {}) => {
-      /* Gross hack - we often want to preserve nice fade-ins / fade-outs
-        when resetting a character or word. This happens when, for example, we're
-        showing the character that we'd generate for the current signal and then
-        the user closes their eyes, which changes the current signal. If we wiped
-        the candidate immediately it wouldn't fade. Instead we just reset the count
-        so that it fades out.
-
-        We want to do a hard reset when we're adding a new character or word to the
-        page, because that character/word will take the place of the candidate.
-
-        Doing all of this means that we have to be more careful about managing
-        our candidate state to avoid showing stale values, but it's worth it. */
-      setCandidate((c) => (hard ? { count: 0 } : { ...c, count: 0 }));
-    };
-
-  const resetCandidateChar = makeResetCandidate(setCandidateChar);
-  const resetCandidateWord = makeResetCandidate(setCandidateWord);
 
   const handleOn = () => {
     resetCandidateChar();
@@ -194,7 +165,12 @@ function Main() {
       <CurrentTextDisplay text={text} candidateWord={candidateWord} />
       <TelegraphButton
         eyesClosed={eyesClosed}
-        setEyesClosed={setButtonEyesClosed}
+        setEyesClosed={React.useCallback(
+          (val) => {
+            setEyesClosed((prev) => ({ ...prev, fromButton: val }));
+          },
+          [setEyesClosed]
+        )}
       />
     </Wrapper>
   );
