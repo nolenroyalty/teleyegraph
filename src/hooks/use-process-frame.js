@@ -7,11 +7,10 @@ function useProcessFrame({
   videoRef,
   signalState,
   estimateFps,
-  callOnTickTransition,
   eyesClosedRef,
   setEyesClosed,
+  setSignalCounts,
 }) {
-  const [decisionThisTick, setDecisionThisTick] = React.useState("unknown");
   const requestRef = React.useRef();
   const landmarker = useLandmarker();
 
@@ -33,23 +32,30 @@ function useProcessFrame({
         signalState.current.open += 1;
       }
 
-      function setDecisionAndMaybeHandleTransition(decision) {
-        setDecisionThisTick((state) => {
-          if (state === "unknown") {
-            callOnTickTransition(decision);
+      function maybeTransition(decision) {
+        if (signalState.current.decision === "unknown") {
+          signalState.current.decision = decision;
+          if (decision === "open") {
+            setSignalCounts((prev) => ({
+              off: prev.off + 1,
+              on: 0,
+              consumed: false,
+            }));
+          } else if (decision === "closed") {
+            setSignalCounts((prev) => ({
+              on: prev.on + 1,
+              off: 0,
+              consumed: false,
+            }));
           }
-          return decision;
-        });
+        }
       }
 
       const neededToCountAsBlink = Math.ceil(estimateFps() / 2);
       if (signalState.current.open >= neededToCountAsBlink) {
-        setDecisionAndMaybeHandleTransition("open");
+        maybeTransition("open");
       } else if (signalState.current.closed >= neededToCountAsBlink) {
-        setDecisionAndMaybeHandleTransition("closed");
-      } else {
-        // TBD: do we want to call the transition handler here?
-        setDecisionThisTick("unknown");
+        maybeTransition("closed");
       }
 
       requestRef.current = window.requestAnimationFrame(f);
@@ -64,16 +70,16 @@ function useProcessFrame({
       window.cancelAnimationFrame(requestRef.current);
     };
   }, [
-    callOnTickTransition,
     estimateFps,
     eyesClosedRef,
     landmarker,
     signalState,
     videoRef,
     setEyesClosed,
+    setSignalCounts,
   ]);
 
-  return { decisionThisTick };
+  return {};
 }
 
 export default useProcessFrame;

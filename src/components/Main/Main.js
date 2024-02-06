@@ -30,34 +30,15 @@ function Main() {
   });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
   const [text, setText] = React.useState("");
-
-  const signalCount = React.useRef({ on: 0, off: 0 });
-
   const { sounds } = React.useContext(SoundContext);
+  const [signalCounts, setSignalCounts] = React.useState({
+    consumed: true,
+    on: 0,
+    off: 0,
+  });
 
-  // const {
-  //   state: eyesClosed,
-  //   ref: eyesClosedRef,
-  //   setState: setEyesClosed,
-  // } = useStateRefCombo({ fromVideo: false, fromButton: false });
-
-  // const {
-  //   state: currentWord,
-  //   ref: wordRef,
-  //   setState: setCurrentWord,
-  // } = useStateRefCombo("");
-
-  const {
-    state: currentChar,
-    ref: charRef,
-    setState: setCurrentChar,
-  } = useStateRefCombo([]);
-
-  const {
-    state: currentSignal,
-    ref: signalRef,
-    setState: setCurrentSignal,
-  } = useStateRefCombo({ state: "none" });
+  const [currentChar, setCurrentChar] = React.useState([]);
+  const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
 
   const [eyesClosed, setEyesClosed] = React.useState({
     fromVideo: false,
@@ -66,25 +47,41 @@ function Main() {
   const eyesClosedRef = React.useRef(eyesClosed);
 
   const [currentWord, setCurrentWord] = React.useState("");
-  const wordRef = React.useRef("");
 
-  // const [currentChar, setCurrentChar] = React.useState([]);
-  // const charRef = React.useRef([]);
+  const { estimateFps, signalState } = useProcessTick({
+    videoDisplayed,
+  });
 
-  // const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
-  // const signalRef = React.useRef({ state: "none" });
+  const setButtonEyesClosed = React.useCallback(
+    (val) => {
+      setEyesClosed((prev) => {
+        const next = { ...prev, fromButton: val };
+        eyesClosedRef.current = next;
+        return next;
+      });
+    },
+    [setEyesClosed]
+  );
 
-  // const setCurrentSignal = React.useCallback(
-  //   (val) => {
-  //     _setCurrentSignal((prev) => {
-  //       console.log(`set cur ${val.state} | prev ${prev.state}`);
-  //       const _new = typeof val === "function" ? val(prev) : val;
-  //       signalRef.current = _new;
-  //       return _new;
-  //     });
-  //   },
-  //   [_setCurrentSignal]
-  // );
+  const setVideoEyesClosed = React.useCallback(
+    (val) => {
+      setEyesClosed((prev) => {
+        const next = { ...prev, fromVideo: val };
+        eyesClosedRef.current = next;
+        return next;
+      });
+    },
+    [setEyesClosed]
+  );
+
+  useProcessFrame({
+    videoRef,
+    signalState,
+    estimateFps,
+    eyesClosedRef,
+    setEyesClosed: setVideoEyesClosed,
+    setSignalCounts,
+  });
 
   const makeResetCandidate =
     (setCandidate) =>
@@ -121,158 +118,64 @@ function Main() {
     [setCandidateWord]
   );
 
-  const handleFirstOffSignal = React.useCallback(() => {
-    if (signalRef.current.state !== "none") {
-      if (charRef.current.length >= MAX_SIGNALS_IN_CHAR) {
-        console.warn(
-          `not adding ${signalRef.current.state} because current character \
-  already has ${MAX_SIGNALS_IN_CHAR} signals`
-        );
+  if (signalCounts.consumed) {
+  } else {
+    setSignalCounts((prev) => ({ ...prev, consumed: true }));
+    console.log("consuming");
+    if (signalCounts.on > 0) {
+      console.log("ON ON");
+      resetCandidateChar();
+      resetCandidateWord();
+      if (signalCounts.on < DITS_IN_DASH) {
+        setCurrentSignal({ state: ".", count: signalCounts.on });
+      } else if (signalCounts.on === DITS_IN_DASH) {
+        setCurrentSignal({ state: "-" });
+      }
+    } else if (signalCounts.off === 1 && currentSignal.state !== "none") {
+      if (currentChar.length >= MAX_SIGNALS_IN_CHAR) {
+        console.warn("Current character has too many signals - not adding.");
       } else {
-        const newChar = [...charRef.current, signalRef.current.state];
+        const newChar = [...currentChar, currentSignal.state];
         const decoded = decodeMorse(newChar.join(""));
         setCurrentChar(newChar);
         if (decoded !== null) {
           setCandidateChar({ char: decoded, count: 1 });
         } else {
-          // HACK and gross edge case - this means we've written out an invalid
-          // character and I'm not sure how to show that well in the UI. For now
-          // I guess we set the candidate char to a warning?
           setCandidateChar({ char: "⁉️", count: 1 });
           console.warn(`Error decoding candidate char ${newChar.join("")}`);
         }
       }
-    }
-    setCurrentSignal({ state: "none" });
-  }, [charRef, setCurrentChar, setCurrentSignal, signalRef]);
-
-  const handleOnSignal = React.useCallback(() => {
-    resetCandidateChar();
-    resetCandidateWord();
-    signalCount.current.off = 0;
-    signalCount.current.on += 1;
-
-    if (signalCount.current.on === DITS_IN_DASH) {
-      setCurrentSignal({ state: "-" });
-    } else if (signalCount.current.on < DITS_IN_DASH) {
-      setCurrentSignal({ state: ".", count: signalCount.current.on });
-    }
-  }, [resetCandidateChar, resetCandidateWord, setCurrentSignal]);
-
-  const handleAddChar = React.useCallback(() => {
-    resetCandidateChar({ hard: true });
-    const decoded = decodeMorse(charRef.current.join(""));
-    if (decoded !== null) {
-      sounds.addChar.play();
-      setCurrentWord(wordRef.current + decoded);
-      wordRef.current = wordRef.current + decoded;
-      setCandidateWord({
-        count: signalCount.current.off,
-        word: " " + wordRef.current,
-      });
-    } else {
-      // nroyalty: HANDLE ERROR
-    }
-    setCurrentChar([]);
-  }, [
-    charRef,
-    resetCandidateChar,
-    setCurrentChar,
-    setCurrentWord,
-    sounds.addChar,
-    wordRef,
-  ]);
-
-  React.useEffect(() => {
-    console.log(
-      `CURRENT SIGNAL: ${currentSignal.state} | ${currentSignal.count} | ${signalRef.current.state} | ${signalRef.current.count}`
-    );
-  }, [currentSignal, signalRef]);
-
-  const callOnTickTransition = React.useCallback(
-    (decision) => {
-      const i = Math.random();
-      console.log(
-        `${i} CALL ON TICK TRANSITION ${decision} signalCount: ${signalCount.current.off}`
-      );
-
-      if (decision === "open") {
-        signalCount.current.on = 0;
-        signalCount.current.off += 1;
-
-        if (signalCount.current.off === 1) {
-          console.log(`${i} HERE`);
-          handleFirstOffSignal();
-        } else if (signalCount.current.off < DITS_TO_ADD_CHARACTER) {
-          setCandidateChar((candidate) => {
-            return { ...candidate, count: signalCount.current.off };
-          });
-        } else if (signalCount.current.off === DITS_TO_ADD_CHARACTER) {
-          handleAddChar();
-        } else if (
-          signalCount.current.off > DITS_TO_ADD_CHARACTER &&
-          signalCount.current.off < DITS_TO_ADD_WORD
-        ) {
-          setCandidateWord((currentWord) => {
-            return { ...currentWord, count: signalCount.current.off };
-          });
-        } else if (signalCount.current.off === DITS_TO_ADD_WORD) {
-          setText((currentText) => {
-            const next = `${currentText} ${wordRef.current}`;
-            setCurrentWord("");
-            wordRef.current = "";
-            return next;
-          });
-
-          resetCandidateWord({ hard: true });
-        }
-      } else if (decision === "closed") {
-        handleOnSignal();
+      setCurrentSignal({ state: "none" });
+    } else if (signalCounts.off < DITS_TO_ADD_CHARACTER) {
+      setCandidateChar((candidate) => ({
+        ...candidate,
+        count: signalCounts.off,
+      }));
+    } else if (signalCounts.off === DITS_TO_ADD_CHARACTER) {
+      resetCandidateChar({ hard: true });
+      const decoded = decodeMorse(currentChar.join(""));
+      if (decoded !== null) {
+        sounds.addChar.play(); // nroyalty: useEffect?
+        const newWord = currentWord + decoded;
+        setCurrentWord(newWord);
+        setCandidateWord({ count: signalCounts.off, word: " " + newWord });
+      } else {
+        // nroyalty: HANDLE ERROR
       }
-    },
-    [
-      handleAddChar,
-      handleOnSignal,
-      setCurrentWord,
-      resetCandidateWord,
-      handleFirstOffSignal,
-    ]
-  );
-
-  const { estimateFps, signalState } = useProcessTick({
-    videoDisplayed,
-  });
-
-  const setButtonEyesClosed = React.useCallback(
-    (val) => {
-      setEyesClosed((prev) => {
-        const next = { ...prev, fromButton: val };
-        eyesClosedRef.current = next;
-        return next;
+      setCurrentChar([]);
+    } else if (
+      signalCounts.off > DITS_TO_ADD_CHARACTER &&
+      signalCounts.off < DITS_TO_ADD_WORD
+    ) {
+      setCandidateWord((currentWord) => {
+        return { ...currentWord, count: signalCounts.off };
       });
-    },
-    [setEyesClosed]
-  );
-
-  const setVideoEyesClosed = React.useCallback(
-    (val) => {
-      setEyesClosed((prev) => {
-        const next = { ...prev, fromVideo: val };
-        eyesClosedRef.current = next;
-        return next;
-      });
-    },
-    [setEyesClosed]
-  );
-
-  const { decisionThisTick } = useProcessFrame({
-    videoRef,
-    signalState,
-    estimateFps,
-    callOnTickTransition,
-    eyesClosedRef,
-    setEyesClosed: setVideoEyesClosed,
-  });
+    } else if (signalCounts.off === DITS_TO_ADD_WORD) {
+      setText((currentText) => `${currentText} ${currentWord}`);
+      setCurrentWord("");
+      resetCandidateWord({ hard: true });
+    }
+  }
 
   return (
     <Wrapper>

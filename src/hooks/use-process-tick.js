@@ -8,7 +8,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
   const TPS = BEST_FPS_GUESS / TICKS_PER_FRAME;
 
   const frameCountIndex = React.useRef(0);
-  const signalState = React.useRef({ open: 0, closed: 0 });
+  const signalState = React.useRef({ open: 0, closed: 0, decision: "unknown" });
   const recentFrameCounts = React.useRef([TPS, TPS, TPS, TPS, TPS]);
   const { sounds } = React.useContext(SoundContext);
 
@@ -22,7 +22,7 @@ function useProcessTick({ videoDisplayed, playSound }) {
 
       recentFrameCounts.current[frameCountIndex.current] =
         signalState.current.open + signalState.current.closed;
-      signalState.current = { open: 0, closed: 0 };
+      signalState.current = { open: 0, closed: 0, decision: "unknown" };
       frameCountIndex.current = (frameCountIndex.current + 1) % 5;
     }
 
