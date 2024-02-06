@@ -118,51 +118,62 @@ function Main() {
     [setCandidateWord]
   );
 
+  const handleOn = () => {
+    resetCandidateChar();
+    resetCandidateWord();
+    if (signalCounts.on < DITS_IN_DASH) {
+      setCurrentSignal({ state: ".", count: signalCounts.on });
+    } else if (signalCounts.on === DITS_IN_DASH) {
+      setCurrentSignal({ state: "-" });
+    }
+  };
+
+  const handleOffOne = () => {
+    if (currentChar.length >= MAX_SIGNALS_IN_CHAR) {
+      console.warn("Current character has too many signals - not adding.");
+    } else {
+      const newChar = [...currentChar, currentSignal.state];
+      const decoded = decodeMorse(newChar.join(""));
+      setCurrentChar(newChar);
+      if (decoded !== null) {
+        setCandidateChar({ char: decoded, count: 1 });
+      } else {
+        setCandidateChar({ char: "⁉️", count: 1 });
+        console.warn(`Error decoding candidate char ${newChar.join("")}`);
+      }
+    }
+    setCurrentSignal({ state: "none" });
+  };
+
+  const handleOffAddChar = () => {
+    resetCandidateChar({ hard: true });
+    const decoded = decodeMorse(currentChar.join(""));
+    if (decoded !== null) {
+      sounds.addChar.play(); // nroyalty: useEffect?
+      const newWord = currentWord + decoded;
+      setCurrentWord(newWord);
+      setCandidateWord({ count: signalCounts.off, word: " " + newWord });
+    } else {
+      // nroyalty: HANDLE ERROR
+    }
+    setCurrentChar([]);
+  };
+
   if (signalCounts.consumed) {
   } else {
     setSignalCounts((prev) => ({ ...prev, consumed: true }));
     console.log("consuming");
     if (signalCounts.on > 0) {
-      console.log("ON ON");
-      resetCandidateChar();
-      resetCandidateWord();
-      if (signalCounts.on < DITS_IN_DASH) {
-        setCurrentSignal({ state: ".", count: signalCounts.on });
-      } else if (signalCounts.on === DITS_IN_DASH) {
-        setCurrentSignal({ state: "-" });
-      }
+      handleOn();
     } else if (signalCounts.off === 1 && currentSignal.state !== "none") {
-      if (currentChar.length >= MAX_SIGNALS_IN_CHAR) {
-        console.warn("Current character has too many signals - not adding.");
-      } else {
-        const newChar = [...currentChar, currentSignal.state];
-        const decoded = decodeMorse(newChar.join(""));
-        setCurrentChar(newChar);
-        if (decoded !== null) {
-          setCandidateChar({ char: decoded, count: 1 });
-        } else {
-          setCandidateChar({ char: "⁉️", count: 1 });
-          console.warn(`Error decoding candidate char ${newChar.join("")}`);
-        }
-      }
-      setCurrentSignal({ state: "none" });
+      handleOffOne();
     } else if (signalCounts.off < DITS_TO_ADD_CHARACTER) {
       setCandidateChar((candidate) => ({
         ...candidate,
         count: signalCounts.off,
       }));
     } else if (signalCounts.off === DITS_TO_ADD_CHARACTER) {
-      resetCandidateChar({ hard: true });
-      const decoded = decodeMorse(currentChar.join(""));
-      if (decoded !== null) {
-        sounds.addChar.play(); // nroyalty: useEffect?
-        const newWord = currentWord + decoded;
-        setCurrentWord(newWord);
-        setCandidateWord({ count: signalCounts.off, word: " " + newWord });
-      } else {
-        // nroyalty: HANDLE ERROR
-      }
-      setCurrentChar([]);
+      handleOffAddChar();
     } else if (
       signalCounts.off > DITS_TO_ADD_CHARACTER &&
       signalCounts.off < DITS_TO_ADD_WORD
