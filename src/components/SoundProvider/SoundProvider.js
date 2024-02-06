@@ -9,9 +9,9 @@ export const SoundContext = React.createContext();
   */
 
 const SOUNDS = [
-  { name: "tick", path: "/block.mp3" },
-  { name: "addChar", path: "/cymbal.mp3" },
-  { name: "beep", path: "/morse-20-seconds.mp3" },
+  { name: "tick", path: "/block.mp3", volume: 0.15 },
+  { name: "addChar", path: "/cymbal.mp3", volume: 0.15 },
+  { name: "beep", path: "/morse-20-seconds.mp3", volume: 0.1 },
 ];
 
 function SoundProvider({ children }) {
@@ -20,17 +20,19 @@ function SoundProvider({ children }) {
     resetAudioPaths: () => {},
   });
 
-  const createAudio = React.useCallback(({ path }) => {
+  const createAudio = React.useCallback(({ path, volume }) => {
     const audio = new Audio(path);
-    audio.volume = 0.15;
+    audio.volume = volume;
     const resetAudioPath = () => (audio.src = path);
     const play = () => audio?.play();
     const reset = () => {
       audio.pause();
       audio.currentTime = 0;
     };
+
     const restart = () => {
       audio.currentTime = 0;
+      audio.volume = volume;
     };
     const setPlaybackSpeed = (speed) => (audio.playbackRate = speed);
     const setLoop = (loop) => (audio.loop = loop);
@@ -58,8 +60,8 @@ function SoundProvider({ children }) {
   }, [sounds]);
 
   React.useEffect(() => {
-    const newSounds = SOUNDS.reduce((acc, { name, path }) => {
-      acc[name] = createAudio({ path });
+    const newSounds = SOUNDS.reduce((acc, { name, path, volume }) => {
+      acc[name] = createAudio({ path, volume });
       return acc;
     }, {});
     setSounds(newSounds);
