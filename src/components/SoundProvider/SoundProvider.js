@@ -1,6 +1,13 @@
 import React from "react";
 
 export const SoundContext = React.createContext();
+
+/* So the deal is that we need to load all of our sounds in
+  after a button is pressed so that they actually play. We do this
+  when the user enables video. This just manages that process and provides
+  a little sound API.
+  */
+
 const SOUNDS = [
   { name: "tick", path: "/block.mp3" },
   { name: "addChar", path: "/cymbal.mp3" },

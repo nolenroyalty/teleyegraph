@@ -25,21 +25,21 @@ import {
 function Main() {
   const videoRef = React.useRef();
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
+  const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
+  const [currentChar, setCurrentChar] = React.useState([]);
   const [candidateChar, setCandidateChar] = React.useState({
     count: 0,
   });
+  const [currentWord, setCurrentWord] = React.useState("");
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
   const [text, setText] = React.useState("");
-  const { sounds } = React.useContext(SoundContext);
   const [signalCounts, setSignalCounts] = React.useState({
     consumed: true,
     on: 0,
     off: 0,
   });
 
-  const [currentChar, setCurrentChar] = React.useState([]);
-  const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
-
+  const { sounds } = React.useContext(SoundContext);
   const {
     state: eyesClosed,
     ref: eyesClosedRef,
@@ -48,8 +48,6 @@ function Main() {
     fromVideo: false,
     fromButton: false,
   });
-
-  const [currentWord, setCurrentWord] = React.useState("");
 
   const { estimateFps, signalState } = useProcessTick({
     videoDisplayed,
@@ -93,25 +91,11 @@ function Main() {
 
         Doing all of this means that we have to be more careful about managing
         our candidate state to avoid showing stale values, but it's worth it. */
-      if (hard) {
-        setCandidate({ count: 0 });
-      } else {
-        setCandidate((c) => {
-          return { ...c, count: 0 };
-        });
-      }
+      setCandidate((c) => (hard ? { count: 0 } : { ...c, count: 0 }));
     };
 
-  // eslint-disable-next-line
-  const resetCandidateChar = React.useCallback(
-    makeResetCandidate(setCandidateChar),
-    [setCandidateChar]
-  );
-  // eslint-disable-next-line
-  const resetCandidateWord = React.useCallback(
-    makeResetCandidate(setCandidateWord),
-    [setCandidateWord]
-  );
+  const resetCandidateChar = makeResetCandidate(setCandidateChar);
+  const resetCandidateWord = makeResetCandidate(setCandidateWord);
 
   const handleOn = () => {
     resetCandidateChar();
