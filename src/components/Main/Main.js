@@ -40,11 +40,14 @@ function Main() {
   const [currentChar, setCurrentChar] = React.useState([]);
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
 
-  const [eyesClosed, setEyesClosed] = React.useState({
+  const {
+    state: eyesClosed,
+    ref: eyesClosedRef,
+    setState: setEyesClosed,
+  } = useStateRefCombo({
     fromVideo: false,
     fromButton: false,
   });
-  const eyesClosedRef = React.useRef(eyesClosed);
 
   const [currentWord, setCurrentWord] = React.useState("");
 
@@ -54,22 +57,14 @@ function Main() {
 
   const setButtonEyesClosed = React.useCallback(
     (val) => {
-      setEyesClosed((prev) => {
-        const next = { ...prev, fromButton: val };
-        eyesClosedRef.current = next;
-        return next;
-      });
+      setEyesClosed((prev) => ({ ...prev, fromButton: val }));
     },
     [setEyesClosed]
   );
 
   const setVideoEyesClosed = React.useCallback(
     (val) => {
-      setEyesClosed((prev) => {
-        const next = { ...prev, fromVideo: val };
-        eyesClosedRef.current = next;
-        return next;
-      });
+      setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
     },
     [setEyesClosed]
   );
@@ -147,6 +142,9 @@ function Main() {
 
   const handleOffAddChar = () => {
     resetCandidateChar({ hard: true });
+    if (currentChar.length === 0) {
+      return;
+    }
     const decoded = decodeMorse(currentChar.join(""));
     if (decoded !== null) {
       sounds.addChar.play(); // nroyalty: useEffect?
@@ -159,8 +157,10 @@ function Main() {
     setCurrentChar([]);
   };
 
-  if (signalCounts.consumed) {
-  } else {
+  const maybeConsumeSignal = () => {
+    if (signalCounts.consumed) {
+      return;
+    }
     setSignalCounts((prev) => ({ ...prev, consumed: true }));
     console.log("consuming");
     if (signalCounts.on > 0) {
@@ -186,7 +186,8 @@ function Main() {
       setCurrentWord("");
       resetCandidateWord({ hard: true });
     }
-  }
+  };
+  maybeConsumeSignal();
 
   return (
     <Wrapper>
