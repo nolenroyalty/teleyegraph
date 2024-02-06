@@ -11,7 +11,7 @@ export const SoundContext = React.createContext();
 const SOUNDS = [
   { name: "tick", path: "/block.mp3" },
   { name: "addChar", path: "/cymbal.mp3" },
-  { name: "beep", path: "/morse-longer.wav" },
+  { name: "beep", path: "/morse-20-seconds.mp3" },
 ];
 
 function SoundProvider({ children }) {

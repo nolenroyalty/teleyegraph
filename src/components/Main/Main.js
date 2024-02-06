@@ -58,7 +58,13 @@ function Main() {
     eyesClosedRef,
     setEyesClosed: React.useCallback(
       (val) => {
-        setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
+        setEyesClosed((prev) => {
+          if (prev.fromVideo !== val) {
+            return { ...prev, fromVideo: val };
+          } else {
+            return prev;
+          }
+        });
       },
       [setEyesClosed]
     ),
