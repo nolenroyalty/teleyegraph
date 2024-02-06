@@ -99,6 +99,9 @@ function Main() {
     setCurrentChar([]);
   };
 
+  /* NOTE: We avoid resetting candidate chars and words to the empty
+  string when the user opens their eyes because it allows for a nice fade,
+  and we'll set a new candidate before showing them again anyway. */
   const maybeConsumeSignal = () => {
     if (signalCounts.consumed) {
       return;
