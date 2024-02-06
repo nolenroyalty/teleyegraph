@@ -4,6 +4,7 @@ export const SoundContext = React.createContext();
 const SOUNDS = [
   { name: "tick", path: "/block.mp3" },
   { name: "addChar", path: "/cymbal.mp3" },
+  { name: "beep", path: "/morse-longer.wav" },
 ];
 
 function SoundProvider({ children }) {
@@ -17,7 +18,26 @@ function SoundProvider({ children }) {
     audio.volume = 0.15;
     const resetAudioPath = () => (audio.src = path);
     const play = () => audio?.play();
-    const obj = { audio, resetAudioPath, play };
+    const reset = () => {
+      audio.pause();
+      audio.currentTime = 0;
+    };
+    const restart = () => {
+      audio.currentTime = 0;
+    };
+    const setPlaybackSpeed = (speed) => (audio.playbackRate = speed);
+    const setLoop = (loop) => (audio.loop = loop);
+    const setVolume = (volume) => (audio.volume = volume);
+    const obj = {
+      audio,
+      resetAudioPath,
+      play,
+      reset,
+      setPlaybackSpeed,
+      setLoop,
+      setVolume,
+      restart,
+    };
 
     return obj;
   }, []);

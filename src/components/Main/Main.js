@@ -8,8 +8,8 @@ import CurrentCharacterDisplay from "../CurrentCharacterDisplay";
 import CurrentWordDisplay from "../CurrentWordDisplay";
 import CurrentTextDisplay from "../CurrentTextDisplay";
 import TelegraphButton from "../TelegraphButton";
+import MorseBeepManager from "../MorseBeepManager";
 
-// import useLandmarker from "../../hooks/use-landmarker";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
 import useStateRefCombo from "../../hooks/use-state-ref-combo";
@@ -26,41 +26,65 @@ function Main() {
   const videoRef = React.useRef();
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
   const [candidateChar, setCandidateChar] = React.useState({
-    char: "A",
     count: 0,
   });
   const [candidateWord, setCandidateWord] = React.useState({ count: 0 });
-  const [text, setText] = React.useState(
-    "TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT TEXT LOREM IPSUM HELPER TEXT "
-  );
+  const [text, setText] = React.useState("");
 
   const signalCount = React.useRef({ on: 0, off: 0 });
 
   const { sounds } = React.useContext(SoundContext);
 
-  const {
-    state: eyesClosed,
-    ref: eyesClosedRef,
-    setState: setEyesClosed,
-  } = useStateRefCombo({ fromVideo: false, fromButton: false });
+  // const {
+  //   state: eyesClosed,
+  //   ref: eyesClosedRef,
+  //   setState: setEyesClosed,
+  // } = useStateRefCombo({ fromVideo: false, fromButton: false });
 
-  const {
-    state: currentWord,
-    ref: wordRef,
-    setState: setCurrentWord,
-  } = useStateRefCombo("WORD");
+  // const {
+  //   state: currentWord,
+  //   ref: wordRef,
+  //   setState: setCurrentWord,
+  // } = useStateRefCombo("");
 
   const {
     state: currentChar,
     ref: charRef,
     setState: setCurrentChar,
-  } = useStateRefCombo([".", "-", "-", "-"]);
+  } = useStateRefCombo([]);
 
   const {
     state: currentSignal,
     ref: signalRef,
     setState: setCurrentSignal,
-  } = useStateRefCombo({ state: ".", count: 2 });
+  } = useStateRefCombo({ state: "none" });
+
+  const [eyesClosed, setEyesClosed] = React.useState({
+    fromVideo: false,
+    fromButton: false,
+  });
+  const eyesClosedRef = React.useRef(eyesClosed);
+
+  const [currentWord, setCurrentWord] = React.useState("");
+  const wordRef = React.useRef("");
+
+  // const [currentChar, setCurrentChar] = React.useState([]);
+  // const charRef = React.useRef([]);
+
+  // const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
+  // const signalRef = React.useRef({ state: "none" });
+
+  // const setCurrentSignal = React.useCallback(
+  //   (val) => {
+  //     _setCurrentSignal((prev) => {
+  //       console.log(`set cur ${val.state} | prev ${prev.state}`);
+  //       const _new = typeof val === "function" ? val(prev) : val;
+  //       signalRef.current = _new;
+  //       return _new;
+  //     });
+  //   },
+  //   [_setCurrentSignal]
+  // );
 
   const makeResetCandidate =
     (setCandidate) =>
@@ -135,12 +159,13 @@ function Main() {
     }
   }, [resetCandidateChar, resetCandidateWord, setCurrentSignal]);
 
-  const HandleAddChar = React.useCallback(() => {
+  const handleAddChar = React.useCallback(() => {
     resetCandidateChar({ hard: true });
     const decoded = decodeMorse(charRef.current.join(""));
     if (decoded !== null) {
       sounds.addChar.play();
       setCurrentWord(wordRef.current + decoded);
+      wordRef.current = wordRef.current + decoded;
       setCandidateWord({
         count: signalCount.current.off,
         word: " " + wordRef.current,
@@ -158,20 +183,32 @@ function Main() {
     wordRef,
   ]);
 
+  React.useEffect(() => {
+    console.log(
+      `CURRENT SIGNAL: ${currentSignal.state} | ${currentSignal.count} | ${signalRef.current.state} | ${signalRef.current.count}`
+    );
+  }, [currentSignal, signalRef]);
+
   const callOnTickTransition = React.useCallback(
     (decision) => {
+      const i = Math.random();
+      console.log(
+        `${i} CALL ON TICK TRANSITION ${decision} signalCount: ${signalCount.current.off}`
+      );
+
       if (decision === "open") {
         signalCount.current.on = 0;
         signalCount.current.off += 1;
 
         if (signalCount.current.off === 1) {
+          console.log(`${i} HERE`);
           handleFirstOffSignal();
         } else if (signalCount.current.off < DITS_TO_ADD_CHARACTER) {
-          setCandidateChar((currentSignal) => {
-            return { ...currentSignal, count: signalCount.current.off };
+          setCandidateChar((candidate) => {
+            return { ...candidate, count: signalCount.current.off };
           });
         } else if (signalCount.current.off === DITS_TO_ADD_CHARACTER) {
-          HandleAddChar();
+          handleAddChar();
         } else if (
           signalCount.current.off > DITS_TO_ADD_CHARACTER &&
           signalCount.current.off < DITS_TO_ADD_WORD
@@ -180,8 +217,13 @@ function Main() {
             return { ...currentWord, count: signalCount.current.off };
           });
         } else if (signalCount.current.off === DITS_TO_ADD_WORD) {
-          setText((currentText) => `${currentText} ${wordRef.current}`);
-          setCurrentWord("");
+          setText((currentText) => {
+            const next = `${currentText} ${wordRef.current}`;
+            setCurrentWord("");
+            wordRef.current = "";
+            return next;
+          });
+
           resetCandidateWord({ hard: true });
         }
       } else if (decision === "closed") {
@@ -189,12 +231,11 @@ function Main() {
       }
     },
     [
-      handleFirstOffSignal,
-      HandleAddChar,
+      handleAddChar,
+      handleOnSignal,
       setCurrentWord,
       resetCandidateWord,
-      wordRef,
-      handleOnSignal,
+      handleFirstOffSignal,
     ]
   );
 
@@ -204,14 +245,22 @@ function Main() {
 
   const setButtonEyesClosed = React.useCallback(
     (val) => {
-      setEyesClosed((prev) => ({ ...prev, fromButton: val }));
+      setEyesClosed((prev) => {
+        const next = { ...prev, fromButton: val };
+        eyesClosedRef.current = next;
+        return next;
+      });
     },
     [setEyesClosed]
   );
 
   const setVideoEyesClosed = React.useCallback(
     (val) => {
-      setEyesClosed((prev) => ({ ...prev, fromVideo: val }));
+      setEyesClosed((prev) => {
+        const next = { ...prev, fromVideo: val };
+        eyesClosedRef.current = next;
+        return next;
+      });
     },
     [setEyesClosed]
   );
@@ -227,6 +276,7 @@ function Main() {
 
   return (
     <Wrapper>
+      <MorseBeepManager eyesClosed={eyesClosed} />
       <VideoDisplay
         videoRef={videoRef}
         videoDisplayed={videoDisplayed}

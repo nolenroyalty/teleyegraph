@@ -19,9 +19,6 @@ function CurrentSignalDisplay({ currentSignal }) {
     third = "dash-right";
   }
 
-  first = "dot";
-  second = "dot";
-
   const width = ref.current?.offsetWidth || 0;
   const height = ref.current?.offsetHeight || 0;
   const targetSize = Math.min(width / 3, height) + "px";

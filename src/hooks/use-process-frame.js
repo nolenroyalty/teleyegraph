@@ -17,8 +17,8 @@ function useProcessFrame({
 
   React.useEffect(() => {
     const f = (time) => {
-      requestRef.current = window.requestAnimationFrame(f);
       if (!landmarker || !videoReady(videoRef.current)) {
+        requestRef.current = window.requestAnimationFrame(f);
         return;
       }
 
@@ -51,12 +51,16 @@ function useProcessFrame({
         // TBD: do we want to call the transition handler here?
         setDecisionThisTick("unknown");
       }
+
+      requestRef.current = window.requestAnimationFrame(f);
     };
 
+    const num = Math.floor(Math.random() * 10000);
+    console.log(`starting animation frame ${num}`);
     requestRef.current = window.requestAnimationFrame(f);
 
     return () => {
-      console.log("canceling animation frame");
+      console.log(`canceling animation frame ${num}`);
       window.cancelAnimationFrame(requestRef.current);
     };
   }, [
@@ -66,6 +70,7 @@ function useProcessFrame({
     landmarker,
     signalState,
     videoRef,
+    setEyesClosed,
   ]);
 
   return { decisionThisTick };

@@ -13,12 +13,17 @@ function useStateRefCombo(initialValue) {
   // we do want to have the rest of our app re-render based on the state.
   // So we do this...
   const [state, _setState] = React.useState(initialValue);
-  const ref = React.useRef(state);
+  const ref = React.useRef(initialValue);
 
-  const setState = React.useCallback((newState) => {
-    ref.current = newState;
-    _setState(newState);
-  }, []);
+  const setState = React.useCallback(
+    (newState) => {
+      const _new =
+        typeof newState === "function" ? newState(ref.current) : newState;
+      ref.current = _new;
+      _setState(_new);
+    },
+    [ref, _setState]
+  );
 
   return { state, setState, ref };
 }
