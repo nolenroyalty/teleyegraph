@@ -24,16 +24,18 @@ function CurrentWordDisplay({ currentWord, candidateChar, signalCounts }) {
   };
 
   return (
-    <Wrapper style={{ "--opacity": calculateSelfOpacity() }}>
-      {currentWord}
-      <Candidate
-        style={{
-          "--opacity": candidateOpacity,
-        }}
-      >
-        {candidateChar}
-      </Candidate>
-    </Wrapper>
+    <>
+      <Wrapper style={{ "--opacity": calculateSelfOpacity() }}>
+        {currentWord}
+        <Candidate
+          style={{
+            "--opacity": candidateOpacity,
+          }}
+        >
+          {candidateChar}
+        </Candidate>
+      </Wrapper>
+    </>
   );
 }
 
@@ -43,8 +45,8 @@ const Candidate = styled.span`
   transition: opacity 200ms ease;
 `;
 
-const Wrapper = styled.p`
-  padding: 0 2px;
+const Wrapper = styled.span`
+  padding: 0 6px;
   opacity: var(--opacity);
   will-change: color, opacity;
   transition:
@@ -52,6 +54,7 @@ const Wrapper = styled.p`
     opacity 200ms ease;
   --font-size: 1.5rem;
   @media (max-width: 600px) {
+    padding: 0 2px;
     --font-size: 1.25rem;
   }
   font-size: var(--font-size);

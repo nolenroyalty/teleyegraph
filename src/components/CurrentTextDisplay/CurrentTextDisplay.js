@@ -52,13 +52,14 @@ const Candidate = styled.span`
 
 const Wrapper = styled.p`
   --font-size: 1.25rem;
+  padding: 0px 7px;
   @media (max-width: 600px) {
     --font-size: 1rem;
+    padding: 0 3px;
   }
   font-size: var(--font-size);
   scroll-behavior: smooth;
 
-  padding: 0px 2px;
   overflow: auto;
   --three-lines: calc(3 * 1.5 * var(--font-size));
   min-height: var(--three-lines);
