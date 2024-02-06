@@ -13,7 +13,6 @@ import MorseBeepManager from "../MorseBeepManager";
 import useProcessFrame from "../../hooks/use-process-frame";
 import useProcessTick from "../../hooks/use-process-tick";
 import useStateRefCombo from "../../hooks/use-state-ref-combo";
-import useResettableCandidate from "../../hooks/use-resettable-candidate";
 
 import { decodeMorse } from "../../utils";
 import {
@@ -28,11 +27,9 @@ function Main() {
   const [videoDisplayed, setVideoDisplayed] = React.useState(false);
   const [currentSignal, setCurrentSignal] = React.useState({ state: "none" });
   const [currentChar, setCurrentChar] = React.useState([]);
-  const [candidateChar, setCandidateChar, resetCandidateChar] =
-    useResettableCandidate();
+  const [candidateChar, setCandidateChar] = React.useState("");
   const [currentWord, setCurrentWord] = React.useState("");
-  const [candidateWord, setCandidateWord, resetCandidateWord] =
-    useResettableCandidate();
+  const [candidateWord, setCandidateWord] = React.useState("");
   const [text, setText] = React.useState("");
   const [signalCounts, setSignalCounts] = React.useState({
     consumed: true,
@@ -68,16 +65,6 @@ function Main() {
     setSignalCounts,
   });
 
-  const handleOn = () => {
-    resetCandidateChar();
-    resetCandidateWord();
-    if (signalCounts.on < DITS_IN_DASH) {
-      setCurrentSignal({ state: ".", count: signalCounts.on });
-    } else if (signalCounts.on === DITS_IN_DASH) {
-      setCurrentSignal({ state: "-" });
-    }
-  };
-
   const handleOffOne = () => {
     if (currentChar.length >= MAX_SIGNALS_IN_CHAR) {
       console.warn("Current character has too many signals - not adding.");
@@ -86,9 +73,9 @@ function Main() {
       const decoded = decodeMorse(newChar.join(""));
       setCurrentChar(newChar);
       if (decoded !== null) {
-        setCandidateChar({ char: decoded, count: 1 });
+        setCandidateChar(decoded);
       } else {
-        setCandidateChar({ char: "⁉️", count: 1 });
+        setCandidateChar("⁉️");
         console.warn(`Error decoding candidate char ${newChar.join("")}`);
       }
     }
@@ -96,7 +83,7 @@ function Main() {
   };
 
   const handleOffAddChar = () => {
-    resetCandidateChar({ hard: true });
+    setCandidateChar("");
     if (currentChar.length === 0) {
       return;
     }
@@ -105,7 +92,7 @@ function Main() {
       sounds.addChar.play(); // nroyalty: useEffect?
       const newWord = currentWord + decoded;
       setCurrentWord(newWord);
-      setCandidateWord({ count: signalCounts.off, word: " " + newWord });
+      setCandidateWord(" " + newWord);
     } else {
       // nroyalty: HANDLE ERROR
     }
@@ -118,28 +105,18 @@ function Main() {
     }
     setSignalCounts((prev) => ({ ...prev, consumed: true }));
     console.log("consuming");
-    if (signalCounts.on > 0) {
-      handleOn();
+    if (signalCounts.on > 0 && signalCounts.on < DITS_IN_DASH) {
+      setCurrentSignal({ state: ".", count: signalCounts.on });
+    } else if (signalCounts.on === DITS_IN_DASH) {
+      setCurrentSignal({ state: "-" });
     } else if (signalCounts.off === 1 && currentSignal.state !== "none") {
       handleOffOne();
-    } else if (signalCounts.off < DITS_TO_ADD_CHARACTER) {
-      setCandidateChar((candidate) => ({
-        ...candidate,
-        count: signalCounts.off,
-      }));
     } else if (signalCounts.off === DITS_TO_ADD_CHARACTER) {
       handleOffAddChar();
-    } else if (
-      signalCounts.off > DITS_TO_ADD_CHARACTER &&
-      signalCounts.off < DITS_TO_ADD_WORD
-    ) {
-      setCandidateWord((currentWord) => {
-        return { ...currentWord, count: signalCounts.off };
-      });
     } else if (signalCounts.off === DITS_TO_ADD_WORD) {
       setText((currentText) => `${currentText} ${currentWord}`);
       setCurrentWord("");
-      resetCandidateWord({ hard: true });
+      setCandidateWord("");
     }
   };
   maybeConsumeSignal();
@@ -155,14 +132,18 @@ function Main() {
       <CurrentSignalDisplay currentSignal={currentSignal} />
       <CurrentCharacterDisplay
         currentChar={currentChar}
-        fadeCount={candidateChar.count}
+        signalCounts={signalCounts}
       />
       <CurrentWordDisplay
         currentWord={currentWord}
         candidateChar={candidateChar}
-        fadeCount={candidateWord.count}
+        signalCounts={signalCounts}
       />
-      <CurrentTextDisplay text={text} candidateWord={candidateWord} />
+      <CurrentTextDisplay
+        text={text}
+        candidateWord={candidateWord}
+        signalCounts={signalCounts}
+      />
       <TelegraphButton
         eyesClosed={eyesClosed}
         setEyesClosed={React.useCallback(

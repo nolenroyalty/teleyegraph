@@ -2,11 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import { DITS_TO_ADD_CHARACTER, DITS_TO_ADD_WORD } from "../../constants";
 
-function CurrentTextDisplay({ text, candidateWord }) {
+function CurrentTextDisplay({ text, candidateWord, signalCounts }) {
   const containerRef = React.useRef();
   const candidateRef = React.useRef();
 
-  const calculateOpacity = (count) => {
+  const calculateOpacity = () => {
+    const count = signalCounts.off;
     const level = Math.max(0, count - DITS_TO_ADD_CHARACTER + 1);
     const max = DITS_TO_ADD_WORD - DITS_TO_ADD_CHARACTER;
     const val = Math.min(1, level / max);
@@ -37,7 +38,7 @@ function CurrentTextDisplay({ text, candidateWord }) {
         ref={candidateRef}
         style={{ "--opacity": calculateOpacity(candidateWord.count) }}
       >
-        {candidateWord.word}
+        {candidateWord}
       </Candidate>
     </Wrapper>
   );

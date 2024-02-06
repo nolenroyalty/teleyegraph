@@ -3,12 +3,12 @@ import styled from "styled-components";
 import SignalDisplay from "../SignalDisplay";
 import { COLORS } from "../../constants";
 
-function CurrentCharacterDisplay({ currentChar, fadeCount }) {
+function CurrentCharacterDisplay({ currentChar, signalCounts }) {
   const arr = [];
   let color = COLORS["black"];
-  if (fadeCount === 1) {
+  if (signalCounts.off === 1) {
     color = COLORS["grey-20"];
-  } else if (fadeCount > 1) {
+  } else if (signalCounts.off > 1) {
     color = COLORS["grey-30"];
   }
 

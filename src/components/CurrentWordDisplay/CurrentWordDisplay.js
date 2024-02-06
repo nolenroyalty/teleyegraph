@@ -6,33 +6,32 @@ import {
   DITS_TO_ADD_WORD,
 } from "../../constants";
 
-function CurrentWordDisplay({ currentWord, candidateChar, fadeCount }) {
-  const calculateCandidateOpacity = (count) => {
-    const val = Math.min(1, count / DITS_TO_ADD_CHARACTER);
-    return val === 0 ? 0 : val + 0.1;
-  };
+function CurrentWordDisplay({ currentWord, candidateChar, signalCounts }) {
+  const offCount = signalCounts.off;
+  const candidateOpacity =
+    offCount === 0 ? 0 : 0.1 + offCount / DITS_TO_ADD_CHARACTER;
 
-  const calculateSelfOpacity = (count) => {
-    if (fadeCount < DITS_TO_ADD_CHARACTER) {
+  const calculateSelfOpacity = () => {
+    if (offCount < DITS_TO_ADD_CHARACTER) {
       return 1;
     }
 
     return (
       1 -
-      (fadeCount - DITS_TO_ADD_CHARACTER) /
+      (offCount - DITS_TO_ADD_CHARACTER) /
         (DITS_TO_ADD_WORD - DITS_TO_ADD_CHARACTER)
     );
   };
 
   return (
-    <Wrapper style={{ "--opacity": calculateSelfOpacity(fadeCount) }}>
+    <Wrapper style={{ "--opacity": calculateSelfOpacity() }}>
       {currentWord}
       <Candidate
         style={{
-          "--opacity": calculateCandidateOpacity(candidateChar.count),
+          "--opacity": candidateOpacity,
         }}
       >
-        {candidateChar.char}
+        {candidateChar}
       </Candidate>
     </Wrapper>
   );
