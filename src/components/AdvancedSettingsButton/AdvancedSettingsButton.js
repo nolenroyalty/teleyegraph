@@ -15,6 +15,7 @@ function AdvancedSettingsButton() {
   const [speedMult, setSpeedMult] = React.useState(1);
   const TriggerOrClose = open ? Dialog.Close : Dialog.Trigger;
   const animationDirection = closing ? "reverse" : "normal";
+  const animationSpeed = closing ? "0.15s" : "0.25s";
 
   const handleOpenChange = (open) => {
     if (open) {
@@ -24,7 +25,7 @@ function AdvancedSettingsButton() {
       setClosing(true);
       setTimeout(() => {
         setOpen(open);
-      }, 300);
+      }, 200);
     }
   };
 
@@ -38,7 +39,10 @@ function AdvancedSettingsButton() {
       <DialogContent>
         <TransitionWrapper
           key={animationDirection}
-          style={{ "--animation-direction": animationDirection }}
+          style={{
+            "--animation-direction": animationDirection,
+            "--animation-speed": animationSpeed,
+          }}
         >
           <VisuallyHidden.Root asChild>
             <Dialog.Title>Advanced Settings</Dialog.Title>
@@ -92,7 +96,8 @@ const TransitionWrapper = styled.div`
   align-content: start;
   backdrop-filter: blur(4px) invert(0.2);
   will-change: transform;
-  animation: ${slideIn} 0.25s ease-out var(--animation-direction) both;
+  animation: ${slideIn} var(--animation-speed) ease-out
+    var(--animation-direction) both;
 `;
 
 const DialogContent = styled(Dialog.Content)``;
