@@ -30,6 +30,8 @@ function useProcessFrame({
       } else {
         setEyesClosed(false);
         signalState.current.open += 1;
+        // If you flicker your eyes it doesn't count as a beep?
+        signalState.current.closed = 0;
       }
 
       function maybeTransition(decision) {

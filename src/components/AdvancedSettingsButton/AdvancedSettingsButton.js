@@ -126,7 +126,7 @@ const StyledButton = styled.button`
 function SpeedSlider({ speedMult, setSpeedMult }) {
   return (
     <>
-      <SettingLabel htmlFor="speed-slider">Speed</SettingLabel>
+      <SettingLabel htmlFor="speed-slider">Dit Speed</SettingLabel>
       <SliderRoot
         id="speed-slider"
         value={[speedMult]}
