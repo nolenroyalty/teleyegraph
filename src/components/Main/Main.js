@@ -1,4 +1,5 @@
 import React from "react";
+import Feather from "react-feather";
 import styled from "styled-components";
 import { SoundContext } from "../SoundProvider";
 
@@ -95,7 +96,7 @@ function Main() {
     }
     const decoded = decodeMorse(currentChar.join(""));
     if (decoded !== null) {
-      sounds.addChar.play(); // nroyalty: useEffect?
+      sounds.addChar.play();
       const newWord = currentWord + decoded;
       setCurrentWord(newWord);
       setCandidateWord(" " + newWord);

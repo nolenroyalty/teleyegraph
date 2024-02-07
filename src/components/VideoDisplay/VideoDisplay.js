@@ -9,6 +9,7 @@ function VideoDisplay({ videoRef, setVideoDisplayed, videoDisplayed }) {
   const { resetAudioPaths } = React.useContext(SoundContext);
 
   const enableCam = React.useCallback(() => {
+    console.log("ENABLE CAM");
     resetAudioPaths();
     setButtonPressed(true);
     navigator.mediaDevices

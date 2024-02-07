@@ -1,4 +1,6 @@
 import React from "react";
+import { useAudioPlayer } from "react-use-audio-player";
+import { useEffectDebugger } from "../../utils";
 
 export const SoundContext = React.createContext();
 
@@ -8,73 +10,88 @@ export const SoundContext = React.createContext();
   a little sound API.
   */
 
-const SOUNDS = [
-  { name: "tick", path: "/block.mp3", volume: 0.15 },
-  { name: "addChar", path: "/cymbal.mp3", volume: 0.15 },
-  { name: "beep", path: "/morse-20-seconds.mp3", volume: 0.1 },
-];
-
 function SoundProvider({ children }) {
-  const [sounds, setSounds] = React.useState({
-    sounds: {},
-    resetAudioPaths: () => {},
-  });
+  console.log("SOUND PROVIDER");
+  /* These need to be refs to prevent an infinite loop when we reset our audio paths.
+  I'm kind of baffled about why - I think that when we call `load` on the audio we 
+  get a new audio element, which causes `tick` (etc) to change. But I think that should
+  really only cause one re-render - I guess maybe once an audio element has been loaded
+  you get a totally new reference on every call to useAudioPlayer?
+  */
+  const tick = React.useRef(useAudioPlayer());
+  const addChar = React.useRef(useAudioPlayer());
+  const beep = React.useRef(useAudioPlayer());
+  const [muted, setMuted] = React.useState(false);
+  const [hasReset, setHasReset] = React.useState(false);
 
-  const createAudio = React.useCallback(({ path, volume }) => {
-    const audio = new Audio(path);
-    audio.volume = volume;
-    const resetAudioPath = () => (audio.src = path);
-    const play = () => audio?.play();
+  const configureAudio = React.useCallback((audio, path, volume) => {
+    console.log("CONFIGURE AUDIO");
+
+    const play = () => {
+      audio.current.seek(0);
+      audio.current.setVolume(volume);
+      audio.current.play();
+    };
+
+    const reload = () => {
+      audio.current.load(path);
+    };
+
     const reset = () => {
-      audio.pause();
-      audio.currentTime = 0;
+      audio.current.stop();
+      audio.current.seek(0);
     };
 
-    const restart = () => {
-      audio.currentTime = 0;
-      audio.volume = volume;
-    };
-    const setPlaybackSpeed = (speed) => (audio.playbackRate = speed);
-    const setLoop = (loop) => (audio.loop = loop);
-    const setVolume = (volume) => (audio.volume = volume);
-    const obj = {
-      audio,
-      resetAudioPath,
+    return {
       play,
+      stop: audio.current.stop,
+      setVolume: audio.current.setVolume,
+      setRate: audio.current.setRate,
+      fade: audio.current.fade,
+      reload,
       reset,
-      setPlaybackSpeed,
-      setLoop,
-      setVolume,
-      restart,
+      mute: audio.current.mute,
     };
-
-    return obj;
   }, []);
 
+  const sounds = React.useMemo(() => {
+    console.log("CONFIGURE SOUNDS");
+
+    return {
+      tick: configureAudio(tick, "/block.mp3", 0.15),
+      addChar: configureAudio(addChar, "/cymbal.mp3", 0.15),
+      beep: configureAudio(beep, "/morse-20-seconds.mp3", 0.1),
+    };
+  }, [configureAudio]);
+
   const resetAudioPaths = React.useCallback(() => {
-    Object.values(sounds).forEach((sound) => {
-      sound.resetAudioPath();
-    });
-    console.log("RESET ALL AUDIO PATHS");
-    console.log({ sounds });
-  }, [sounds]);
+    console.log("RESET AUDIO PATHS");
+    setHasReset(true);
+  }, []);
+
+  useEffectDebugger(() => {
+    if (hasReset) {
+      Object.values(sounds).forEach((sound) => {
+        sound.reload();
+      });
+    }
+  }, [sounds, hasReset]);
 
   React.useEffect(() => {
-    const newSounds = SOUNDS.reduce((acc, { name, path, volume }) => {
-      acc[name] = createAudio({ path, volume });
-      return acc;
-    }, {});
-    setSounds(newSounds);
-  }, [createAudio]);
+    console.log("SET MUTED");
+    Object.values(sounds).forEach((sound) => {
+      sound.mute(muted);
+    });
+  }, [sounds, muted]);
 
-  const value = React.useMemo(
-    () => ({ sounds, resetAudioPaths }),
-    [sounds, resetAudioPaths]
-  );
+  const value = React.useMemo(() => {
+    console.log("CREATE VALUE");
+    return { sounds, resetAudioPaths, muted, setMuted };
+  }, [sounds, resetAudioPaths, muted]);
 
   return (
     <SoundContext.Provider value={value}>{children}</SoundContext.Provider>
   );
 }
 
-export default SoundProvider;
+export default React.memo(SoundProvider);

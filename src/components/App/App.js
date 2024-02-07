@@ -3,10 +3,12 @@ import React from "react";
 import Main from "../Main";
 import styled from "styled-components";
 import SoundProvider from "../SoundProvider";
+import MuteIcon from "../MuteIcon";
 
 function App() {
   return (
     <SoundProvider>
+      <MuteIcon />
       <MaxWidthWrapper>
         <HeaderAux />
         <Main />

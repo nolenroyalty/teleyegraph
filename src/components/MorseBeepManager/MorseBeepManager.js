@@ -29,9 +29,7 @@ function MorseBeepManager({ eyesClosed }) {
     } else if (nowPlaying && !playing.current) {
       const debounce = getDebounce();
       timeout.current = setTimeout(() => {
-        beep?.restart();
-        beep?.play();
-        beep?.setLoop(true);
+        beep.play();
         playing.current = true;
       }, debounce);
       return () => {
@@ -39,8 +37,7 @@ function MorseBeepManager({ eyesClosed }) {
         timeout.current = null;
       };
     } else if (!nowPlaying && playing.current) {
-      beep?.reset();
-      beep?.setLoop(false);
+      beep.stop();
       playing.current = false;
     }
   }, [eyesClosed, beep, getDebounce]);
