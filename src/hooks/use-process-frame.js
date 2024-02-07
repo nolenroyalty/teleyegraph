@@ -53,10 +53,11 @@ function useProcessFrame({
         }
       }
 
-      const neededToCountAsBlink = Math.ceil(estimateFps() / 2);
-      if (signalState.current.open >= neededToCountAsBlink) {
+      const neededToCountAsOpen = Math.ceil(estimateFps() / 2);
+      const neededToCountAsClosed = Math.ceil(estimateFps() * 0.8);
+      if (signalState.current.open >= neededToCountAsOpen) {
         maybeTransition("open");
-      } else if (signalState.current.closed >= neededToCountAsBlink) {
+      } else if (signalState.current.closed >= neededToCountAsClosed) {
         maybeTransition("closed");
       }
 

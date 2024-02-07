@@ -1,9 +1,20 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { COLORS } from "../../constants";
+import { SettingsContext } from "../SettingsProvider";
+const BASE_TRANSITION_SPEED = 400;
 
 function SignalDisplay({ state, color = COLORS["black"] }) {
   const style = { "--opacity": 1, "--color": color };
+  const { speedMult } = React.useContext(SettingsContext);
+
+  const transitionSpeed = Math.max(
+    200,
+    speedMult <= 1 ? BASE_TRANSITION_SPEED : BASE_TRANSITION_SPEED / speedMult
+  );
+
+  style["--transition-speed"] = `${transitionSpeed}ms`;
+
   if (state === "dot") {
     style["--border-radius"] = "50%";
     style["--scale"] = "1";
@@ -39,10 +50,10 @@ const Signal = styled.span`
   will-change: border-radius, transform, opacity, background-color;
 
   transition:
-    border-radius 500ms ease-out,
-    transform 500ms ease,
-    opacity 500ms ease,
-    background-color 500ms ease;
+    border-radius var(--transition-speed) ease-out,
+    transform var(--transition-speed) ease,
+    opacity var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
 
   opacity: var(--opacity);
   border-radius: var(--border-radius);
