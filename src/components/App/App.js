@@ -3,17 +3,17 @@ import React from "react";
 import Main from "../Main";
 import styled from "styled-components";
 import SoundProvider from "../SoundProvider";
-import MuteIcon from "../MuteIcon";
+import SettingsBar from "../SettingsBar";
 import Header from "../Header";
 
 function App() {
   return (
     <SoundProvider>
-      <MuteIcon />
       <MaxWidthWrapper>
         <Header />
         <Main />
       </MaxWidthWrapper>
+      <SettingsBar />
     </SoundProvider>
   );
 }

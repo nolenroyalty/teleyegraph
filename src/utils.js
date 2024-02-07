@@ -2,7 +2,10 @@ import React from "react";
 
 export function videoReady(video) {
   return (
-    video.readyState >= 3 && !video.paused && (video.src || video.srcObject)
+    video &&
+    video.readyState >= 3 &&
+    !video.paused &&
+    (video.src || video.srcObject)
   );
 }
 

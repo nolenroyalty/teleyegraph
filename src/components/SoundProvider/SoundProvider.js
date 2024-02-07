@@ -11,7 +11,6 @@ export const SoundContext = React.createContext();
   */
 
 function SoundProvider({ children }) {
-  console.log("SOUND PROVIDER");
   /* These need to be refs to prevent an infinite loop when we reset our audio paths.
   I'm kind of baffled about why - I think that when we call `load` on the audio we 
   get a new audio element, which causes `tick` (etc) to change. But I think that should

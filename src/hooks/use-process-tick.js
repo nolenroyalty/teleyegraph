@@ -4,7 +4,7 @@ import { SoundContext } from "../components/SoundProvider";
 function useProcessTick({ videoDisplayed, playSound }) {
   const TICK_TIME = 1000;
   const BEST_FPS_GUESS = 60;
-  const TICKS_PER_FRAME = TICK_TIME / 1000;
+  const TICKS_PER_FRAME = 1000 / TICK_TIME;
   const TPS = BEST_FPS_GUESS / TICKS_PER_FRAME;
 
   const frameCountIndex = React.useRef(0);
