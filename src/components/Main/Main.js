@@ -124,6 +124,7 @@ function Main() {
     } else if (signalCounts.off === DITS_TO_ADD_CHARACTER) {
       handleOffAddChar();
     } else if (signalCounts.off === DITS_TO_ADD_WORD) {
+      sounds.addWord.play();
       setText((currentText) => `${currentText} ${currentWord}`);
       setCurrentWord("");
       setCandidateWord("");

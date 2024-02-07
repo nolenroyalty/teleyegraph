@@ -25,6 +25,7 @@ function SoundProvider({ children }) {
   */
   const tick = React.useRef(useAudioPlayer());
   const addChar = React.useRef(useAudioPlayer());
+  const addWord = React.useRef(useAudioPlayer());
   const beep = React.useRef(useAudioPlayer());
   const [muted, setMuted] = React.useState(false);
   const [hasReset, setHasReset] = React.useState(false);
@@ -63,8 +64,9 @@ function SoundProvider({ children }) {
     console.log("CONFIGURE SOUNDS");
 
     return {
-      tick: configureAudio(tick, "/block.mp3", 0.15),
-      addChar: configureAudio(addChar, "/cymbal.mp3", 0.15),
+      tick: configureAudio(tick, "/block.mp3", 0.075),
+      addChar: configureAudio(addChar, "/key-gentle.wav", 0.15),
+      addWord: configureAudio(addWord, "/key-loud.wav", 0.15),
       beep: configureAudio(beep, "/morse-20-seconds.mp3", 0.1),
     };
   }, [configureAudio]);
