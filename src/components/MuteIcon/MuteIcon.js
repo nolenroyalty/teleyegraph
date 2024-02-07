@@ -27,14 +27,8 @@ const Button = styled.button`
   color: hsl(0deg 0% 10% / 0.7);
 
   position: fixed;
-  top: 15px;
-  right: 15px;
-
-  @media (max-width: 600px) {
-    top: initial;
-    bottom: 20px;
-    right: 10px;
-  }
+  bottom: 10px;
+  right: 14px;
 `;
 
 export default MuteIcon;

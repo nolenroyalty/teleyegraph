@@ -110,7 +110,7 @@ const MaxWidthWrapper = styled.div`
   max-width: var(--max-width);
   width: min(100vw, var(--max-width));
   height: 100%;
-  padding: calc(var(--padding) / 2) var(--padding);
+  padding: calc(var(--padding) / 4) var(--padding) calc(var(--padding) / 2);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
