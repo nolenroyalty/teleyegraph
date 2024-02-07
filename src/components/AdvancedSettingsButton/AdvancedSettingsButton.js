@@ -1,53 +1,82 @@
 import React from "react";
 import SettingsButton from "../SettingsButton";
 import Icon from "../Icon";
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { COLORS } from "../../constants";
 import * as Switch from "@radix-ui/react-switch";
 import * as Slider from "@radix-ui/react-slider";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 
-function AdvancedSettingsButton({ setDisplayAdvancedSettings }) {
+function AdvancedSettingsButton() {
   const [open, setOpen] = React.useState(false);
+  const [closing, setClosing] = React.useState(false);
   const [metronomeEnabled, setMetronomeEnabled] = React.useState(true);
   const [speedMult, setSpeedMult] = React.useState(1);
-
   const TriggerOrClose = open ? Dialog.Close : Dialog.Trigger;
+  const animationDirection = closing ? "reverse" : "normal";
+
+  const handleOpenChange = (open) => {
+    if (open) {
+      setOpen(open);
+      setClosing(false);
+    } else {
+      setClosing(true);
+      setTimeout(() => {
+        setOpen(open);
+      }, 300);
+    }
+  };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <TriggerOrClose asChild key="foo">
         <SettingsButton $scaleUp={open} key="bar">
           <Icon name="settings" />
         </SettingsButton>
       </TriggerOrClose>
       <DialogContent>
-        <VisuallyHidden.Root asChild>
-          <Dialog.Title>Advanced Settings</Dialog.Title>
-        </VisuallyHidden.Root>
-        <MetronomeEnabled
-          metronomeEnabled={metronomeEnabled}
-          setMetronomeEnabled={setMetronomeEnabled}
-        />
-        <SpeedSlider speedMult={speedMult} setSpeedMult={setSpeedMult} />
-        <Button
-          onClick={(e) => {
-            setMetronomeEnabled(true);
-            setSpeedMult(1);
-          }}
+        <TransitionWrapper
+          key={animationDirection}
+          style={{ "--animation-direction": animationDirection }}
         >
-          Reset
-        </Button>
-        <Dialog.Close asChild>
-          <Button style={{ "--justify-self": "end" }}>Close</Button>
-        </Dialog.Close>
+          <VisuallyHidden.Root asChild>
+            <Dialog.Title>Advanced Settings</Dialog.Title>
+          </VisuallyHidden.Root>
+          <MetronomeEnabled
+            metronomeEnabled={metronomeEnabled}
+            setMetronomeEnabled={setMetronomeEnabled}
+          />
+          <SpeedSlider speedMult={speedMult} setSpeedMult={setSpeedMult} />
+          <Button
+            onClick={(e) => {
+              setMetronomeEnabled(true);
+              setSpeedMult(1);
+            }}
+          >
+            Reset
+          </Button>
+          <Dialog.Close asChild>
+            <Button style={{ "--justify-self": "end" }}>Close</Button>
+          </Dialog.Close>
+        </TransitionWrapper>
       </DialogContent>
     </Dialog.Root>
   );
 }
 
-const DialogContent = styled(Dialog.Content)`
+const slideIn = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
+
+const TransitionWrapper = styled.div`
   position: fixed;
   left: 0;
   min-width: 250px;
@@ -62,7 +91,11 @@ const DialogContent = styled(Dialog.Content)`
   grid-template-rows: auto auto 150px;
   align-content: start;
   backdrop-filter: blur(4px) invert(0.2);
+  will-change: transform;
+  animation: ${slideIn} 0.25s ease-out var(--animation-direction) both;
 `;
+
+const DialogContent = styled(Dialog.Content)``;
 
 const Button = React.forwardRef((props, ref) => (
   <StyledButton ref={ref} {...props} />

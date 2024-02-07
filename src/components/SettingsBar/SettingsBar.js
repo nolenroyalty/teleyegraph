@@ -2,22 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import MuteIcon from "../MuteIcon";
 import AdvancedSettingsButton from "../AdvancedSettingsButton";
-import AdvancedSettingsDisplay from "../AdvancedSettingsDisplay";
 
 function SettingsBar() {
-  const [displayAdvancedSettings, setDisplayAdvancedSettings] =
-    React.useState(false);
   return (
     <>
-      {/* {displayAdvancedSettings && (
-        <AdvancedSettingsDisplay
-          closeDisplay={() => setDisplayAdvancedSettings(false)}
-        />
-      )} */}
       <Wrapper>
-        <AdvancedSettingsButton
-          setDisplayAdvancedSettings={setDisplayAdvancedSettings}
-        />
+        <AdvancedSettingsButton />
         <MuteIcon />
       </Wrapper>
     </>
