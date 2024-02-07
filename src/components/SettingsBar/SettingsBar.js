@@ -9,11 +9,11 @@ function SettingsBar() {
     React.useState(false);
   return (
     <>
-      {displayAdvancedSettings && (
+      {/* {displayAdvancedSettings && (
         <AdvancedSettingsDisplay
           closeDisplay={() => setDisplayAdvancedSettings(false)}
         />
-      )}
+      )} */}
       <Wrapper>
         <AdvancedSettingsButton
           setDisplayAdvancedSettings={setDisplayAdvancedSettings}

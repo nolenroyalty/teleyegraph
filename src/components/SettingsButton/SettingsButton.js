@@ -1,8 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { COLORS } from "../../constants";
 
-function SettingsButton({ children, ...props }) {
-  return <Button {...props}>{children}</Button>;
+function SettingsButton({ children, ...props }, forwardedRef) {
+  return (
+    <Button ref={forwardedRef} {...props}>
+      {children}
+    </Button>
+  );
 }
 
 const Button = styled.button`
@@ -12,8 +17,15 @@ const Button = styled.button`
   padding: 0;
   -webkit-tap-highlight-color: transparent;
   pointer-events: auto;
+  color: ${COLORS["grey-20"]};
+  will-change: transform;
+  transition: transform 100ms;
 
-  color: hsl(0deg 0% 10% / 0.7);
+  transform: ${(p) => (p.$scaleUp ? "scale(1.1)" : "scale(1)")};
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
-export default SettingsButton;
+export default React.forwardRef(SettingsButton);

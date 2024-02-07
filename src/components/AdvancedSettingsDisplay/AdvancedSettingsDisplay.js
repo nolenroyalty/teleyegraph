@@ -52,7 +52,7 @@ const Wrapper = styled.div`
   left: 0;
   min-width: 250px;
   bottom: 75px;
-  background: hsl(0deg 0% 0% / 0.1);
+  background: hsl(0deg 0% 80% / 0.5);
   border-radius: 0px 10px 10px 0px;
   padding: 20px;
 
@@ -61,7 +61,7 @@ const Wrapper = styled.div`
   grid-template-columns: auto auto;
   grid-template-rows: auto auto 150px;
   align-content: start;
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(4px) invert(0.2);
 `;
 
 function SpeedSlider({ speedMult, setSpeedMult }) {
