@@ -1,12 +1,15 @@
 import React from "react";
 import { SoundContext } from "../SoundProvider";
+import { SettingsContext } from "../SettingsProvider";
 
 const DEBOUNCE_THRESHOLDS = { fromVideo: 150, fromButton: 0 };
+/* This should be an effect lol */
 
 function MorseBeepManager({ eyesClosed }) {
   const playing = React.useRef(false);
   const timeout = React.useRef(null);
   const { sounds } = React.useContext(SoundContext);
+  const { speedMult } = React.useContext(SettingsContext);
   const beep = sounds.beep;
 
   const getDebounce = React.useCallback(() => {
@@ -16,10 +19,13 @@ function MorseBeepManager({ eyesClosed }) {
     const fromButton = eyesClosed.fromButton
       ? DEBOUNCE_THRESHOLDS.fromButton
       : 99999;
-    const min = Math.min(fromVideo, fromButton);
+    let min = Math.min(fromVideo, fromButton);
+    if (speedMult > 1) {
+      min = min / speedMult;
+    }
     console.log(`getDebounce: ${min}`);
     return min;
-  }, [eyesClosed]);
+  }, [speedMult, eyesClosed]);
 
   React.useEffect(() => {
     const nowPlaying = eyesClosed.fromVideo || eyesClosed.fromButton;

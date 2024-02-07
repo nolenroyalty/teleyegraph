@@ -7,12 +7,13 @@ import * as Switch from "@radix-ui/react-switch";
 import * as Slider from "@radix-ui/react-slider";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import { SettingsContext } from "../SettingsProvider";
 
 function AdvancedSettingsButton() {
   const [open, setOpen] = React.useState(false);
   const [closing, setClosing] = React.useState(false);
-  const [metronomeEnabled, setMetronomeEnabled] = React.useState(true);
-  const [speedMult, setSpeedMult] = React.useState(1);
+  const { metronomeEnabled, setMetronomeEnabled, speedMult, setSpeedMult } =
+    React.useContext(SettingsContext);
   const TriggerOrClose = open ? Dialog.Close : Dialog.Trigger;
   const animationDirection = closing ? "reverse" : "normal";
   const animationSpeed = closing ? "0.15s" : "0.25s";

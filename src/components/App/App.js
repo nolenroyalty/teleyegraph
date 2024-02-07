@@ -2,19 +2,22 @@ import React from "react";
 
 import Main from "../Main";
 import styled from "styled-components";
+import SettingsProvider from "../SettingsProvider";
 import SoundProvider from "../SoundProvider";
 import SettingsBar from "../SettingsBar";
 import Header from "../Header";
 
 function App() {
   return (
-    <SoundProvider>
-      <MaxWidthWrapper>
-        <Header />
-        <Main />
-      </MaxWidthWrapper>
-      <SettingsBar />
-    </SoundProvider>
+    <SettingsProvider>
+      <SoundProvider>
+        <MaxWidthWrapper>
+          <Header />
+          <Main />
+        </MaxWidthWrapper>
+        <SettingsBar />
+      </SoundProvider>
+    </SettingsProvider>
   );
 }
 

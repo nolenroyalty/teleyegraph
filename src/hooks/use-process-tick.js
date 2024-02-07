@@ -1,16 +1,21 @@
 import React from "react";
 import { SoundContext } from "../components/SoundProvider";
+import { SettingsContext } from "../components/SettingsProvider";
+
+const BASE_TICK_TIME = 750;
+const BEST_FPS_GUESS = 60;
 
 function useProcessTick({ videoDisplayed, playSound }) {
-  const TICK_TIME = 1000;
-  const BEST_FPS_GUESS = 60;
-  const TICKS_PER_FRAME = 1000 / TICK_TIME;
-  const TPS = BEST_FPS_GUESS / TICKS_PER_FRAME;
+  const { sounds } = React.useContext(SoundContext);
+  const { metronomeEnabled, speedMult } = React.useContext(SettingsContext);
+
+  const tickTime = BASE_TICK_TIME / speedMult;
+  const ticksPerFrame = 1000 / tickTime;
+  const TPS = BEST_FPS_GUESS / ticksPerFrame;
 
   const frameCountIndex = React.useRef(0);
   const signalState = React.useRef({ open: 0, closed: 0, decision: "unknown" });
   const recentFrameCounts = React.useRef([TPS, TPS, TPS, TPS, TPS]);
-  const { sounds } = React.useContext(SoundContext);
 
   React.useEffect(() => {
     function handleTick() {
@@ -18,7 +23,9 @@ function useProcessTick({ videoDisplayed, playSound }) {
         return;
       }
 
-      sounds.tick.play();
+      if (metronomeEnabled) {
+        sounds.tick.play();
+      }
 
       recentFrameCounts.current[frameCountIndex.current] =
         signalState.current.open + signalState.current.closed;
@@ -26,9 +33,19 @@ function useProcessTick({ videoDisplayed, playSound }) {
       frameCountIndex.current = (frameCountIndex.current + 1) % 5;
     }
 
-    const timerId = setInterval(handleTick, TICK_TIME);
-    return () => clearInterval(timerId);
-  }, [signalState, videoDisplayed, sounds, playSound]);
+    const timerId = setInterval(handleTick, tickTime);
+    return () => {
+      console.log("Resetting tick handler");
+      clearInterval(timerId);
+    };
+  }, [
+    signalState,
+    videoDisplayed,
+    sounds,
+    playSound,
+    tickTime,
+    metronomeEnabled,
+  ]);
 
   const estimateFps = React.useCallback(() => {
     const averageFrames = recentFrameCounts.current.reduce(

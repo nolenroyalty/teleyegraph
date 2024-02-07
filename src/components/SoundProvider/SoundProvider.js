@@ -10,6 +10,12 @@ export const SoundContext = React.createContext();
   a little sound API.
   */
 
+/* This is not the right way to handle this problem. If I could do it again I'd just
+  wrap useAudioPlayer in my own custom hook that added the functions that I wanted and
+  also took a "force reload" state variable that, via useEffect, caused a load.
+
+  but I didn't do that. Here we are. */
+
 function SoundProvider({ children }) {
   /* These need to be refs to prevent an infinite loop when we reset our audio paths.
   I'm kind of baffled about why - I think that when we call `load` on the audio we 
@@ -68,7 +74,7 @@ function SoundProvider({ children }) {
     setHasReset(true);
   }, []);
 
-  useEffectDebugger(() => {
+  React.useEffect(() => {
     if (hasReset) {
       Object.values(sounds).forEach((sound) => {
         sound.reload();
