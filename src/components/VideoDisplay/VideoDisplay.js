@@ -31,7 +31,15 @@ function VideoDisplay({ videoRef, setVideoDisplayed, videoDisplayed }) {
   return (
     <Wrapper>
       <VideoWrapper $videoDisplayed={videoDisplayed}>
-        <Video $videoDisplayed={videoDisplayed} ref={videoRef} autoPlay muted />
+        <OneMoreWrapper>
+          <Video
+            $videoDisplayed={videoDisplayed}
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+          />
+        </OneMoreWrapper>
         <Button disabled={buttonPressed} onClick={enableCam}>
           <p>Enable Video</p>
         </Button>
@@ -39,6 +47,13 @@ function VideoDisplay({ videoRef, setVideoDisplayed, videoDisplayed }) {
     </Wrapper>
   );
 }
+
+const OneMoreWrapper = styled.div`
+  width: fit-content;
+  height: 100%;
+  margin: 0 auto;
+  border-radius: 8px;
+`;
 
 const Button = styled.button`
   width: fit-content;
@@ -77,6 +92,11 @@ const VideoWrapper = styled.div`
   margin: 0 auto;
   position: relative;
   border-radius: 4.5% / 8%;
+
+  /* iOS doesn't like this being attached to the video element so we put it
+    here.
+  */
+  filter: sepia(0.75);
 `;
 
 const Wrapper = styled.div`
@@ -92,14 +112,16 @@ const Wrapper = styled.div`
 `;
 
 const Video = styled.video`
+  filter: drop-shadow(2px 2px 8px black);
+  max-width: 100%;
   max-height: 100%;
+  object-fit: contain;
   margin: 0 auto;
   display: block;
   will-change: opacity;
   transition: opacity 1.5s ease;
   opacity: ${(p) => (p.$videoDisplayed ? 1 : 0)};
   border-radius: 16px;
-  filter: drop-shadow(2px 2px 8px black) sepia(0.75);
 `;
 
 export default React.memo(VideoDisplay);
