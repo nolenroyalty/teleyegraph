@@ -43,7 +43,7 @@ body {
   font-weight: 400;
 
   background-image: 
-    url("/noise.svg"),
+    url("./noise.svg"),
     radial-gradient(circle at 100% 5%, 
     var(--color-tan-400) 5%, 
     var(--color-tan-300) 30%,

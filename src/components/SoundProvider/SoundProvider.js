@@ -64,10 +64,10 @@ function SoundProvider({ children }) {
     console.log("CONFIGURE SOUNDS");
 
     return {
-      tick: configureAudio(tick, "/block.mp3", 0.075),
-      addChar: configureAudio(addChar, "/key-gentle.wav", 0.15),
-      addWord: configureAudio(addWord, "/key-loud.wav", 0.15),
-      beep: configureAudio(beep, "/morse-20-seconds.mp3", 0.1),
+      tick: configureAudio(tick, "./block.mp3", 0.075),
+      addChar: configureAudio(addChar, "./key-gentle.wav", 0.15),
+      addWord: configureAudio(addWord, "./key-loud.wav", 0.15),
+      beep: configureAudio(beep, "./morse-20-seconds.mp3", 0.1),
     };
   }, [configureAudio]);
 
