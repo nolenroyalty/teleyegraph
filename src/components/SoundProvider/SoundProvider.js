@@ -28,7 +28,6 @@ function SoundProvider({ children }) {
   const addWord = React.useRef(useAudioPlayer());
   const beep = React.useRef(useAudioPlayer());
   const [muted, setMuted] = React.useState(false);
-  const [hasReset, setHasReset] = React.useState(false);
 
   const configureAudio = React.useCallback((audio, path, volume) => {
     console.log("CONFIGURE AUDIO");
@@ -73,16 +72,10 @@ function SoundProvider({ children }) {
 
   const resetAudioPaths = React.useCallback(() => {
     console.log("RESET AUDIO PATHS");
-    setHasReset(true);
-  }, []);
-
-  React.useEffect(() => {
-    if (hasReset) {
-      Object.values(sounds).forEach((sound) => {
-        sound.reload();
-      });
-    }
-  }, [sounds, hasReset]);
+    Object.values(sounds).forEach((sound) => {
+      sound.reload();
+    });
+  }, [sounds]);
 
   React.useEffect(() => {
     console.log("SET MUTED");
