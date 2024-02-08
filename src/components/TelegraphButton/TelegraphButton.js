@@ -70,9 +70,15 @@ const Front = styled.span`
     p.$pressed ? "transform 0.1s ease-out" : "transform 0.3s ease"};
   top: 0;
   left: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 `;
 
 const Button = styled.button`
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
   position: relative;
   margin: 0 auto;
   padding: 0;
