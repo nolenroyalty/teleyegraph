@@ -31,7 +31,6 @@ function TelegraphButton({ eyesClosed, setEyesClosed }) {
 const Front = styled.span`
   display: block;
   width: 100%;
-
   height: 100%;
 
   border-radius: 50%;
