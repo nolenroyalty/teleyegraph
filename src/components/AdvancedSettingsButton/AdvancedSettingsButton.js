@@ -63,7 +63,7 @@ function AdvancedSettingsButton() {
             setEnabled={setMetronomeEnabled}
           />
           <SettingsSwitch
-            label="Show Morse Display"
+            label="Always Show Codes"
             htmlFor="force-show-morse-display"
             enabled={forceShowMorseDisplay}
             setEnabled={setForceShowMorseDisplay}
