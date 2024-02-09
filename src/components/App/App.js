@@ -6,6 +6,7 @@ import SettingsProvider from "../SettingsProvider";
 import SoundProvider from "../SoundProvider";
 import SettingsBar from "../SettingsBar";
 import Header from "../Header";
+import MorseDisplay from "../MorseDisplay";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Main />
         </MaxWidthWrapper>
         <SettingsBar />
+        <MorseDisplay />
       </SoundProvider>
     </SettingsProvider>
   );

@@ -22,49 +22,54 @@ export function isBlinking(results) {
   return false;
 }
 
-export function decodeMorse(currentDurations) {
-  var ref = {
-    ".-": "a",
-    "-...": "b",
-    "-.-.": "c",
-    "-..": "d",
-    ".": "e",
-    "..-.": "f",
-    "--.": "g",
-    "....": "h",
-    "..": "i",
-    ".---": "j",
-    "-.-": "k",
-    ".-..": "l",
-    "--": "m",
-    "-.": "n",
-    "---": "o",
-    ".--.": "p",
-    "--.-": "q",
-    ".-.": "r",
-    "...": "s",
-    "-": "t",
-    "..-": "u",
-    "...-": "v",
-    ".--": "w",
-    "-..-": "x",
-    "-.--": "y",
-    "--..": "z",
-    ".----": "1",
-    "..---": "2",
-    "...--": "3",
-    "....-": "4",
-    ".....": "5",
-    "-....": "6",
-    "--...": "7",
-    "---..": "8",
-    "----.": "9",
-    "-----": "0",
-  };
+export const CODES = [
+  [".-", "a"],
+  ["-...", "b"],
+  ["-.-.", "c"],
+  ["-..", "d"],
+  [".", "e"],
+  ["..-.", "f"],
+  ["--.", "g"],
+  ["....", "h"],
+  ["..", "i"],
+  [".---", "j"],
+  ["-.-", "k"],
+  [".-..", "l"],
+  ["--", "m"],
+  ["-.", "n"],
+  ["---", "o"],
+  [".--.", "p"],
+  ["--.-", "q"],
+  [".-.", "r"],
+  ["...", "s"],
+  ["-", "t"],
+  ["..-", "u"],
+  ["...-", "v"],
+  [".--", "w"],
+  ["-..-", "x"],
+  ["-.--", "y"],
+  ["--..", "z"],
+  [".----", "1"],
+  ["..---", "2"],
+  ["...--", "3"],
+  ["....-", "4"],
+  [".....", "5"],
+  ["-....", "6"],
+  ["--...", "7"],
+  ["---..", "8"],
+  ["----.", "9"],
+  ["-----", "0"],
+];
 
-  if (currentDurations in ref) {
+export const CODES_BY_SIGNAL = CODES.reduce((acc, [signal, letter]) => {
+  acc[signal] = letter;
+  return acc;
+}, {});
+
+export function decodeMorse(currentDurations) {
+  if (currentDurations in CODES_BY_SIGNAL) {
     // return uppercased string
-    return ref[currentDurations].toUpperCase();
+    return CODES_BY_SIGNAL[currentDurations].toUpperCase();
   } else {
     console.warn(`no match for ${currentDurations}`);
     return null;

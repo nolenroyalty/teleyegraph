@@ -2,18 +2,26 @@ import React from "react";
 import SettingsButton from "../SettingsButton";
 import Icon from "../Icon";
 import styled, { keyframes, css } from "styled-components";
+import SettingsSwitch from "../SettingsSwitch";
 import { COLORS } from "../../constants";
 import * as Switch from "@radix-ui/react-switch";
 import * as Slider from "@radix-ui/react-slider";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { SettingsContext } from "../SettingsProvider";
+import SettingsLabel from "../SettingsLabel";
 
 function AdvancedSettingsButton() {
   const [open, setOpen] = React.useState(false);
   const [closing, setClosing] = React.useState(false);
-  const { metronomeEnabled, setMetronomeEnabled, speedMult, setSpeedMult } =
-    React.useContext(SettingsContext);
+  const {
+    metronomeEnabled,
+    setMetronomeEnabled,
+    speedMult,
+    setSpeedMult,
+    forceShowMorseDisplay,
+    setForceShowMorseDisplay,
+  } = React.useContext(SettingsContext);
   const TriggerOrClose = open ? Dialog.Close : Dialog.Trigger;
   const animationDirection = closing ? "reverse" : "normal";
   const animationSpeed = closing ? "0.15s" : "0.25s";
@@ -48,9 +56,17 @@ function AdvancedSettingsButton() {
           <VisuallyHidden.Root asChild>
             <Dialog.Title>Advanced Settings</Dialog.Title>
           </VisuallyHidden.Root>
-          <MetronomeEnabled
-            metronomeEnabled={metronomeEnabled}
-            setMetronomeEnabled={setMetronomeEnabled}
+          <SettingsSwitch
+            label="Metronome"
+            htmlFor="metronome-enabled"
+            enabled={metronomeEnabled}
+            setEnabled={setMetronomeEnabled}
+          />
+          <SettingsSwitch
+            label="Show Morse Display"
+            htmlFor="force-show-morse-display"
+            enabled={forceShowMorseDisplay}
+            setEnabled={setForceShowMorseDisplay}
           />
           <SpeedSlider speedMult={speedMult} setSpeedMult={setSpeedMult} />
           <Button
@@ -93,7 +109,7 @@ const TransitionWrapper = styled.div`
   display: grid;
   gap: 8px 16px;
   grid-template-columns: auto auto;
-  grid-template-rows: auto auto 150px;
+  grid-template-rows: auto auto auto 150px;
   align-content: start;
   backdrop-filter: blur(4px) invert(0.2);
   will-change: transform;
@@ -126,7 +142,7 @@ const StyledButton = styled.button`
 function SpeedSlider({ speedMult, setSpeedMult }) {
   return (
     <>
-      <SettingLabel htmlFor="speed-slider">Dit Speed</SettingLabel>
+      <SettingsLabel htmlFor="speed-slider">Dit Speed</SettingsLabel>
       <SliderRoot
         id="speed-slider"
         value={[speedMult]}
@@ -182,69 +198,10 @@ const SliderThumb = styled(Slider.Thumb)`
   }
 `;
 
-function MetronomeEnabled({ metronomeEnabled, setMetronomeEnabled }) {
-  return (
-    <>
-      <SettingLabel htmlFor="metronome-enabled">Metronome</SettingLabel>
-      <SwitchWrapper>
-        <SwitchRoot
-          id="metronome-enabled"
-          checked={metronomeEnabled}
-          onCheckedChange={(checked) => setMetronomeEnabled(checked)}
-        >
-          <SwitchThumb />
-        </SwitchRoot>
-      </SwitchWrapper>
-    </>
-  );
-}
-
-const SwitchWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: end;
-`;
-
 const SettingLabel = styled.label`
   font-size: 1.25em;
   display: flex;
   align-items: center;
-`;
-
-const SwitchRoot = styled(Switch.Root)`
-  width: 42px;
-  height: 25px;
-  border-radius: 99999px;
-  padding: 0;
-  border: none;
-  position: relative;
-  box-shadow: 0 2px 4px hsl(0deg 0% 0% / 0.2);
-  background-color: ${COLORS["grey-30"]};
-  -webkit-tap-highlight-color: transparent;
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px black;
-  }
-
-  &[data-state="checked"] {
-    background-color: ${COLORS["black"]};
-  }
-`;
-
-const SwitchThumb = styled(Switch.Thumb)`
-  display: block;
-  width: 21px;
-  height: 21px;
-  transition: transform 100ms;
-  transform: translateX(2px);
-  will-change: transform;
-  background-color: white;
-  border-radius: 9999px;
-
-  &[data-state="checked"] {
-    transform: translateX(19px);
-  }
 `;
 
 export default AdvancedSettingsButton;
