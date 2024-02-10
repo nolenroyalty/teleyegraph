@@ -9,17 +9,17 @@ function MorseDisplay() {
   return (
     <Wrapper style={{ "--translate-override": translateOverride }}>
       {CODES.map(([code, letter]) => (
-        <p key={code}>
+        <div key={code}>
           <LetterAndCode>
             <span>{letter}</span> <span>{code}</span>
           </LetterAndCode>
-        </p>
+        </div>
       ))}
     </Wrapper>
   );
 }
 
-const LetterAndCode = styled.div`
+const LetterAndCode = styled.p`
   display: flex;
   justify-content: start;
   gap: 20px;

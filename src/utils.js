@@ -22,6 +22,18 @@ export function isBlinking(results) {
   return false;
 }
 
+export function setToLocalStorage(key, value) {
+  window.localStorage.setItem(key, JSON.stringify(value));
+}
+
+export function getFromLocalStorage(key, defaultValue) {
+  const value = window.localStorage.getItem(key);
+  if (value === null) {
+    return defaultValue;
+  }
+  return JSON.parse(value);
+}
+
 export const CODES = [
   [".-", "a"],
   ["-...", "b"],
@@ -63,6 +75,11 @@ export const CODES = [
 
 export const CODES_BY_SIGNAL = CODES.reduce((acc, [signal, letter]) => {
   acc[signal] = letter;
+  return acc;
+}, {});
+
+export const SIGNALS_BY_CODE = CODES.reduce((acc, [signal, letter]) => {
+  acc[letter] = signal;
   return acc;
 }, {});
 

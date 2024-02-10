@@ -2,6 +2,7 @@ import React from "react";
 import Feather from "react-feather";
 import styled from "styled-components";
 import { SoundContext } from "../SoundProvider";
+import TempHelper from "../TempHelper";
 
 import VideoDisplay from "../VideoDisplay";
 import CurrentSignalDisplay from "../CurrentSignalDisplay";

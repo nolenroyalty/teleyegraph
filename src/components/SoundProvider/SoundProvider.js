@@ -1,6 +1,7 @@
 import React from "react";
 import { useAudioPlayer } from "react-use-audio-player";
 import { useEffectDebugger } from "../../utils";
+import { getFromLocalStorage, setToLocalStorage } from "../../utils";
 
 export const SoundContext = React.createContext();
 
@@ -16,6 +17,8 @@ export const SoundContext = React.createContext();
 
   but I didn't do that. Here we are. */
 
+const AUDIO_MUTED = "audio-muted";
+
 function SoundProvider({ children }) {
   /* These need to be refs to prevent an infinite loop when we reset our audio paths.
   I'm kind of baffled about why - I think that when we call `load` on the audio we 
@@ -27,7 +30,14 @@ function SoundProvider({ children }) {
   const addChar = React.useRef(useAudioPlayer());
   const addWord = React.useRef(useAudioPlayer());
   const beep = React.useRef(useAudioPlayer());
-  const [muted, setMuted] = React.useState(false);
+  const [muted, _setMuted] = React.useState(() =>
+    getFromLocalStorage(AUDIO_MUTED, false)
+  );
+
+  const setMuted = React.useCallback((value) => {
+    setToLocalStorage(AUDIO_MUTED, value);
+    _setMuted(value);
+  }, []);
 
   const configureAudio = React.useCallback((audio, path, volume) => {
     console.log("CONFIGURE AUDIO");

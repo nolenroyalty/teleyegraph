@@ -54,7 +54,7 @@ function useProcessFrame({
       }
 
       const neededToCountAsOpen = Math.ceil(estimateFps() / 2);
-      const neededToCountAsClosed = Math.ceil(estimateFps() * 0.8);
+      const neededToCountAsClosed = Math.ceil(estimateFps() * 0.7);
       if (signalState.current.open >= neededToCountAsOpen) {
         maybeTransition("open");
       } else if (signalState.current.closed >= neededToCountAsClosed) {

@@ -8,12 +8,17 @@ import {
 
 function CurrentWordDisplay({ currentWord, candidateChar, signalCounts }) {
   const offCount = signalCounts.off;
-  const candidateOpacity =
+  let candidateOpacity =
     offCount === 0 ? 0 : 0.1 + offCount / DITS_TO_ADD_CHARACTER;
+  candidateOpacity = Math.min(1, candidateOpacity);
 
   const calculateSelfOpacity = () => {
     if (offCount < DITS_TO_ADD_CHARACTER) {
       return 1;
+    }
+
+    if (offCount >= DITS_TO_ADD_WORD) {
+      return 0;
     }
 
     return (
