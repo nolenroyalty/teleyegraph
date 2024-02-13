@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import GlobalStyles from "./components/GlobalStyles";
 import App from "./components/App";
+import "./injectProdAnalytics";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
